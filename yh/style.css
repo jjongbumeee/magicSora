@@ -3,12 +3,12 @@
     color:black;
     text-decoration: none;
     }
-  #button {
-    display: grid;
-    grid-template-columns: auto;
-  }
   #active {
     color:red;
+  }
+  #but {
+    display: grid;
+    grid-template-columns: auto;
   }
   h1 {
     text-align: center;
@@ -52,5 +52,8 @@
   h1 {
       border-bottom: none;
       }
+    #but {
+      display: flex;
+    }
 }
 </style>
