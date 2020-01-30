@@ -1,4 +1,4 @@
-# 마법의 소라고동 프로젝트
+# 마법의 소라고동 프로젝트 [!https://img.shields.io/badge/status-developing-red.svg?style=flat]
 
 ### Team Member : 이영훈, 정종범, 허수혁
 
@@ -19,5 +19,5 @@
     <li> 사용자 UI 개발 </li>
     <li> 타 헌책방 재고 검색 기능... 등 </li> 
     </ul><br>
-  <li> 깃헙 사용 방법 (readme.md 작성법, 깃헙 데스크탑 앱) </li>
+  <li> 깃헙 사용 방법 (<a href=https://github.com/sejong-interface/Interface_Manual/wiki/Git-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0%233-README.md-%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1%ED%95%98%EA%B8%B0!>readme.md 작성법</a>, 깃헙 데스크탑 앱) </li>
   </ol>
