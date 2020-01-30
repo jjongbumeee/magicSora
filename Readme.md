@@ -5,7 +5,7 @@
 #### 2020.01.30 전체 콘티회의 주제
  <ol>
   <li> 프로젝트 동기 & 목적 </li>
-  <ul><li> <a href= https://namu.wiki/w/%EC%95%8C%EB%9D%BC%EB%94%98%EC%A4%91%EA%B3%A0%EC%84%9C%EC%A0%90#s-4> 참고 기사 </a></li></ul></br>
+  <ul><li> <a href= https://namu.wiki/w/%EC%95%8C%EB%9D%BC%EB%94%98%EC%A4%91%EA%B3%A0%EC%84%9C%EC%A0%90#s-4> 참고 기사 </a></li></ul>
   <li> 프로젝트명 (현 가명 마법의 소라고동) </li> <br>
   <li> <a href=https://www.samsungsds.com/global/ko/support/insights/frameworks.html> 프론트엔드 프레임워크 선정 </a> </li><br>
   <li> 개인별 역할 분담 </li><br>
