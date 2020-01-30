@@ -1,4 +1,4 @@
-# 마법의 소라고동 프로젝트 [!https://img.shields.io/badge/status-developing-red.svg?style=flat]
+# 마법의 소라고동 프로젝트 [[Status](!https://img.shields.io/badge/status-developing-red.svg?style=flat)]
 
 ### Team Member : 이영훈, 정종범, 허수혁
 
