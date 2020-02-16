@@ -20,11 +20,8 @@ export default {
       // console.log(this.newTodoItem);
       // 저장하는 로직
       if(this.newTodoItem !== '') {
-        var obj = {
-          completed: false,
-          item: this.newTodoItem
-        };
-        localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
+        // this.$emit(이벤트 이름, 인자 1, 인자 2, ...)
+        this.$emit('addTodoItem', this.newTodoItem);
         this.clearInput();  
       }
     },
