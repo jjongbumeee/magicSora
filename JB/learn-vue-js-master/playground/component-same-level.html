@@ -8,13 +8,14 @@
 </head>
 <body>
     <div id="app">
-        <app-header></app-header>
-        <app-content></app-content>
+        <app-header v-bind:pro="num"></app-header>
+        <app-content v-on:pass="resend"></app-content>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
         var appHeader = {
-            template: '<div>header</div>'
+            template: '<div>header {{pro}} </div>',
+            props: ['pro'] 
         }
         var appContent = {
             template: '<div>content<button v-on:click="passEvent">pass</button></div>',
@@ -32,6 +33,12 @@
             },
             data: {
                 num: 0
+            },
+            methods: {
+                resend: function(num) {
+                    this.num = num;
+
+                }
             }
         })
     </script>
