@@ -1,21 +1,33 @@
 <template>
   <div class="inputBox shadow">
-      <input type="text">
-      <span class="addContainer">
-          <i class="fas fa-search addBtn"></i>
+      <input type="text" v-model="searchItem" v-on:keyup.enter="bookSearch">
+      <span class="searchContainer" v-on:click="bookSearch">
+          <i class="fas fa-search searchBtn"></i>
       </span>
   </div>
 </template>
 
 <script>
 export default {
-
+  data: function() {
+    return {
+      searchItem: ""
+    }
+  },
+  methods: {
+    bookSearch: function() {
+      this.$emit('search', this.searchItem);
+      this.searchItem = '';
+    }
+  }
 }
 </script>
 
 <style scoped>
 input:focus {
   outline: none;
+  width: 80%;
+  text-align: center;
 }
 .inputBox {
   background: white;
@@ -27,14 +39,14 @@ input:focus {
   border-style: none;
   font-size: 0.9rem;
 }
-.addContainer {
+.searchContainer {
   float: right;
   background: linear-gradient(to right, #6478fb, #8763fb);
   display: block;
   width: 3rem;
   border-radius: 0 5px 5px 0;
 }
-.addBtn {
+.searchBtn {
   color: white;
   vertical-align: middle;
 }
