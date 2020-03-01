@@ -30,7 +30,10 @@ export default {
 
   methods: {
     fileSelect: function() {
-      this.bookItem.image = this.$refs.refimage.files[0]
+      console.log(this.$refs.refimage.files[0]); 
+      this.bookItem.image = btoa(this.$refs.refimage.files[0])
+      console.log(this.bookItem.image);
+      
     },
     bookReg: function() {
       //this.$emit('bookReg', this.bookItem);

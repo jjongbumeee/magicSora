@@ -5,7 +5,7 @@
 </div>
     <div id="contents">
     <button @click="bookGiver">show</button>
-    <div v-if="bookdata"><p>{{ booklist }}</p></div>
+    <p v-if=bookdata>{{ booklist }}</p>
   </div>
 </div>
 
@@ -26,8 +26,9 @@ export default {
       this.axios.get('http://localhost:3000/booktbl')
         .then((response) => {
           this.booklist = JSON.parse(JSON.stringify(response.data))
+          this.$emit('bookAdded', this.booklist)
         })
-      this.bookdata = true
+        this.bookdata = true
     }
   }
 }

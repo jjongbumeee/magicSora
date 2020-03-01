@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -11,7 +13,7 @@ const Sequelize = require("sequelize");
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
-const sequelize = new Sequelize("o2", "root", "root", {
+const sequelize = new Sequelize("o2", "root", "rbgw5155!", {
   host: "localhost",
   dialect: "mysql"
 });
@@ -20,6 +22,11 @@ const admin = sequelize.define(
   "admin",
   {
     // attributes
+    bid: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     id: {
       type: Sequelize.STRING,
       allowNUll: false,
@@ -34,7 +41,8 @@ const admin = sequelize.define(
     freezeTableName: true,
     timestamps: true
     // options
-  }
+  },
+  
 );
 const book = sequelize.define(
   "book",
@@ -61,7 +69,9 @@ const book = sequelize.define(
       allowNULL: false
     },
     image: {
-      type: Sequelize.BLOB('long')
+      type: Sequelize.STRING,
+      allowNULL: false
+      // type: Sequelize.BLOB('long')
     }
   },
   {
@@ -137,7 +147,6 @@ router.options("/booktbl", (req, res) => {
   );
   res.send();
 });
-
 
 
 

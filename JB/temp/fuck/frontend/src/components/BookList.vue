@@ -1,7 +1,7 @@
 <template>
   <ul class="shadow">
     <div v-for="(bookData) in propsdata" v-bind:key="bookData.bid">
-      <img id="bookimg" v-bind:src="bookData.img">
+      <img id="bookimg" v-bind:src="bookData.imageBinary">
       <li>
           책 이름: {{ bookData.name }} <br>
           저자: {{ bookData.auth }}<br>
@@ -20,6 +20,9 @@ export default {
       if (!value) return ''
       return value.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,") 
     } 
+  },
+  methods: {
+
   }
 }
 </script>

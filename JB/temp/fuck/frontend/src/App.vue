@@ -57,26 +57,39 @@ export default {
       regStatus : true,
       NotRegStat : false,
       bookList: [
-         {
-          name : '',
-          auth : '',
-          pub: '',
-          price: 0,
-          bid : 1,
-          image : ''
-        }
+        //  {
+        //   name : '',
+        //   auth : '',
+        //   pub: '',
+        //   price: 0,
+        //   bid : 1,
+        //   image : '',
+        //   createdAt: '',
+        //   updatedAt: ''
+        // }
       ]
     }
   },
-  methods: {
-    created: {
-      bookGiver() {
+  created() {
       this.axios.get('http://localhost:3000/booktbl')
         .then((response) => {
-          this.booklist = JSON.parse(JSON.stringify(response.data))
+          this.bookList = JSON.parse(JSON.stringify(response.data))
+          var img, bin =[]
+          for(var i = 0; i < this.bookList.length; i++) {
+            img = this.bookList[i].image.data
+            for(var j = 0; j < img.length; j++) { 
+              bin[j] = String.fromCharCode(this.bookList[i].image.data[j])
+            }
+            // console.log(bin)
+
+            var bytes = new Uint8Array(bin)
+            var blob = new Blob([bytes], {type:'image/bmp'})
+            this.bookList[i].imageBinary = URL.createObjectURL(blob).substr(5)
+            URL.revokeObjectURL(blob)
+          }
         })
-      }
     },
+  methods: {
     searchDB: function(name) {
       console.log(name + ' DB 검색');
       // DB 코드 추가
@@ -93,7 +106,7 @@ export default {
     },
     addItem: function(bookInfo) {
       console.log(bookInfo.name + ' ' + bookInfo.auth + ' ' + bookInfo.pub + ' ' + bookInfo.price);
-    }
+    },
   },
   router: router
 }
