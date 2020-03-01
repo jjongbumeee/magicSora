@@ -30,8 +30,6 @@ import VueRouter from 'vue-router'
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
 
-
-
 export const router = new VueRouter({
   routes: [
     {
@@ -73,17 +71,17 @@ export default {
   created() {
       this.axios.get('http://localhost:3000/booktbl')
         .then((response) => {
-          this.bookList = JSON.parse(JSON.stringify(response.data))
-          var img, bin =[]
+          this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
+          var img, bin =''
           for(var i = 0; i < this.bookList.length; i++) {
             img = this.bookList[i].image.data
             for(var j = 0; j < img.length; j++) { 
-              bin[j] = String.fromCharCode(this.bookList[i].image.data[j])
+              bin = bin + String.fromCharCode(this.bookList[i].image.data[j])
             }
-            // console.log(bin)
             bin = atob(bin)
+            console.log(bin)
             var bytes = new Uint8Array(bin)
-            var blob = new Blob([bytes], {type:'image/bmp'})
+            var blob = new Blob([bytes], {type:'image/jpg'})
             this.bookList[i].imageBinary = URL.createObjectURL(blob).substr(5)
             URL.revokeObjectURL(blob)
           }

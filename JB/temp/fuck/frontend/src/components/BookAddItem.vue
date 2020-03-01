@@ -31,19 +31,25 @@ export default {
   methods: {
     fileSelect: function() {
       console.log(this.$refs.refimage.files[0]); 
-      this.bookItem.image = btoa(this.$refs.refimage.files[0])
+      this.bookItem.image = window.btoa(this.$refs.refimage.files[0])
       console.log(this.bookItem.image);
       
     },
     bookReg: function() {
       //this.$emit('bookReg', this.bookItem);
-      this.axios.post('http://localhost:3000/book_receiver', {
-        name: this.bookItem.name,
-        auth: this.bookItem.auth,
-        pub: this.bookItem.pub,
-        price: this.bookItem.price,
-        image: this.bookItem.image
-      })
+      let formData = new FormData()
+      formData.append('image', this.bookItem.image)
+      formData.append('name', this.bookItem.name)
+      formData.append('auth', this.bookItem.auth)
+      formData.append('pub', this.bookItem.pub)
+      formData.append('price', this.bookItem.price)
+      
+      let config = {
+        header: {
+          'Content-Type' : 'image/png'
+        }
+      }
+      this.axios.post('http://localhost:3000/book_receiver', formData, config)
         .then((response) => {
           this.output = response.data
           this.bookItem.name = this.bookItem.auth = this.bookItem.pub = this.bookItem.price = '';
@@ -52,9 +58,8 @@ export default {
         .catch((error) => {
           this.output = error
         })
+        
     },
-    
-    
   }
 }
 </script>
