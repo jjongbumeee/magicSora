@@ -81,7 +81,7 @@ export default {
               bin[j] = String.fromCharCode(this.bookList[i].image.data[j])
             }
             // console.log(bin)
-
+            bin = atob(bin)
             var bytes = new Uint8Array(bin)
             var blob = new Blob([bytes], {type:'image/bmp'})
             this.bookList[i].imageBinary = URL.createObjectURL(blob).substr(5)
