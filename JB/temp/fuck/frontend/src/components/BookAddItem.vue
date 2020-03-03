@@ -1,14 +1,16 @@
 <template>
+<form @submit.prevent="sendfile" enctype="multipart/form-data">
   <div>
     <div class="bookInfo shadow">
       <p>제 목 : <input type="text" v-model="bookItem.name"></p>
       <p>저 자 : <input type="text" v-model="bookItem.auth"></p>
       <p>출판사 : <input type="text" v-model="bookItem.pub"></p>
       <p>금 액 : <input type="text" v-model="bookItem.price"></p>
-      <p>사 진 : <input v-on:change='fileSelect()' type="file" ref='refimage' accept="image/*;capture=camera"></p>
-      <button v-on:click="bookReg">등록하기</button>
+      <p>사 진 : <input @change='fileSelect' type="file" name="myfile" ref='refimage' accept="image/*;capture=camera" ></p>
+      <button v-on:click="sendfile">등록하기</button>
     </div>
   </div>
+</form>
 </template>
 
 <script>
@@ -23,6 +25,7 @@ export default {
         price: 0,
         image: '',
         output: '',
+        file: ''
       },
     }
     
@@ -30,31 +33,29 @@ export default {
 
   methods: {
     fileSelect: function() {
-      console.log(this.$refs.refimage.files[0]); 
-      this.bookItem.image = btoa(this.$refs.refimage.files[0])
-      console.log(this.bookItem.image);
+      const file = this.$refs.refimage.files[0]
+      const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
       
+      if(allowedTypes.includes(file.type)) {
+        this.bookItem.file = file;
+      }
+      this.bookItem.image = btoa(this.$refs.refimage.files[0])
     },
-    bookReg: function() {
-      //this.$emit('bookReg', this.bookItem);
-      this.axios.post('http://localhost:3000/book_receiver', {
-        name: this.bookItem.name,
-        auth: this.bookItem.auth,
-        pub: this.bookItem.pub,
-        price: this.bookItem.price,
-        image: this.bookItem.image
-      })
-        .then((response) => {
-          this.output = response.data
-          this.bookItem.name = this.bookItem.auth = this.bookItem.pub = this.bookItem.price = '';
-          this.fil = ''
-        })
-        .catch((error) => {
-          this.output = error
-        })
+    async sendfile() {
+      const formData = new FormData();
+      formData.append('file', this.bookItem.file);
+      formData.append('name', this.bookItem.name);
+      formData.append('auth', this.bookItem.auth);
+      formData.append('pub', this.bookItem.pub);
+      formData.append('price', this.bookItem.price);
+
+      try {
+        await this.axios.post('http://localhost:3000/upload', formData )
+        this.bookItem.file = ""
+      } catch(err) {
+        console.log(err);
+      }
     },
-    
-    
   }
 }
 </script>

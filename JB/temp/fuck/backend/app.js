@@ -4,10 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
+var app = express();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var app = express();
+  
+  
+  
+//app.route('/api/img').post(upload.single('img'));
 
 //DB parser
 app.use(function (req, res, next) {

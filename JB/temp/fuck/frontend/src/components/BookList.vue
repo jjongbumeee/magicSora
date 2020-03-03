@@ -1,7 +1,7 @@
 <template>
   <ul class="shadow">
     <div v-for="(bookData) in propsdata" v-bind:key="bookData.bid">
-      <img id="bookimg" v-bind:src="bookData.imageBinary">
+      <img id="bookimg" v-bind:src="bookData.image">
       <li>
           책 이름: {{ bookData.name }} <br>
           저자: {{ bookData.auth }}<br>
@@ -22,6 +22,7 @@ export default {
     } 
   },
   methods: {
+    
 
   }
 }

@@ -1,19 +1,20 @@
 var express = require('express');
 var router = express.Router();
-
+var multer = require('multer');
+var router = express();
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
-
 const bodyParser = require("body-parser");
 const Sequelize = require("sequelize");
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
+router.use(express.static('uploads'));
 
-const sequelize = new Sequelize("o2", "root", "rbgw5155!", {
+const sequelize = new Sequelize("o2", "root", "root", {
   host: "localhost",
   dialect: "mysql"
 });
@@ -22,11 +23,6 @@ const admin = sequelize.define(
   "admin",
   {
     // attributes
-    bid: {
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
     id: {
       type: Sequelize.STRING,
       allowNUll: false,
@@ -47,14 +43,16 @@ const admin = sequelize.define(
 const book = sequelize.define(
   "book",
   {
+
     bid: {
       type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
     name: {
       type: Sequelize.STRING,
       allowNULL: false,
-
-      primaryKey: true
+      allowNULL: false
     },
     auth: {
       type: Sequelize.STRING,
@@ -71,12 +69,12 @@ const book = sequelize.define(
     image: {
       type: Sequelize.STRING,
       allowNULL: false
-      // type: Sequelize.BLOB('long')
+      
     }
   },
   {
     freezeTableName: true,
-    timestamps: true
+    timeStamps: true
     // options
   }
 );
@@ -94,26 +92,6 @@ router.post("/admin_receiver", (request, response) => {
   });
   response.send(id + "///" + password);
 });
-
-router.post("/book_receiver", (request, response) => {
-  const name = request.body.name;
-  const auth = request.body.auth;
-  const pub = request.body.pub;
-  const price = request.body.price;
-  const image = request.body.image;
-  //res.header("Access-Control-Allow-Origin", "*");
-  book.create({
-    name: name,
-    auth: auth,
-    pub: pub,
-    price: price,
-    image: image
-   }).then(book => {
-    console.log("generated BOOK", book.name);
-  });
-  response.send(name + "///" + auth + '///' + pub + '///' + price + '///' + image);
-});
-
 
 router.get("/booktbl", (req, res) => {
   book.findAll().then(booktbl => {
@@ -147,6 +125,55 @@ router.options("/booktbl", (req, res) => {
   );
   res.send();
 });
+
+//upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads/');
+  },
+  filename : (req, file, cb) => {
+    const originalFileName = file.originalname.split('.');
+    let fileName = 'none';
+    if(originalFileName.length > 0) {
+      fileName = `${originalFileName[0]}-${Date.now()}.${originalFileName[1]}`;
+    }
+    cb(null, fileName)
+  }
+});
+const upload = multer({
+  storage: storage,
+})
+
+
+router.post("/upload", upload.single('file'), (req, res) => {
+  //res.json({ file: req.file });
+  const name = req.body.name;
+  const auth = req.body.auth;
+  const pub = req.body.pub;
+  const price = req.body.price;
+  const image = req.file.filename;
+  book.create({
+    name: name,
+    auth: auth,
+    pub: pub,
+    price: price,
+    image: image
+  }).then(book => {
+    console.log("generated BOOK", book.name);
+  });
+});
+
+router.use(function (err, req, res, next) {
+  if (err.code === "LIMIT_FILE_TYPES") {
+    res.status(422).json({ error: "Only images are allowed" });
+    return;
+  }
+  if (err.code === "LIMIT_FILE_SIZE") {
+    res.status(422).json({ error: `Too large. MAx size is ${MAX_SIZE / 1000}K` });
+  }
+})
+
+
 
 
 
