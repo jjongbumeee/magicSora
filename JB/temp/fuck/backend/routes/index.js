@@ -14,7 +14,7 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(express.static('uploads'));
 
-const sequelize = new Sequelize("o2", "root", "root", {
+const sequelize = new Sequelize("o2", "root", "rbgw5155!", {
   host: "localhost",
   dialect: "mysql"
 });
