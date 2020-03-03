@@ -30,8 +30,6 @@ import VueRouter from 'vue-router'
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
 
-
-
 export const router = new VueRouter({
   routes: [
     {
@@ -70,30 +68,14 @@ export default {
       ]
     }
   },
-<<<<<<< Updated upstream
   created() {
       this.axios.get('http://localhost:3000/booktbl')
         .then((response) => {
           this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
-          
-          
-          /*var img, bin =''
-          for(var i = 0; i < this.bookList.length; i++) {
-            img = this.bookList[i].image.data
-            for(var j = 0; j < image.length; j++) { 
-              bin = bin + String.fromCharCode(this.bookList[i].image.data[j])
-            }
-            //bin = atob(bin)
-            console.log(bin)
-            var bytes = new Uint8Array(bin)
-            var blob = new Blob([bytes], {type:'image/jpg'})
-            this.bookList[i].imageBinary = URL.createObjectURL(blob).substr(5)
-            URL.revokeObjectURL(blob)
-          }*/
-        })
+
+          }
+        )
     },
-=======
->>>>>>> Stashed changes
   methods: {
     searchDB: function(name) {
       console.log(name + ' DB 검색');
