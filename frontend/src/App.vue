@@ -29,8 +29,7 @@ import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
-
-
+import host from './assets/iptable.json'
 
 export const router = new VueRouter({
   routes: [
@@ -67,11 +66,12 @@ export default {
            createdAt: '',
            updatedAt: ''
          }
-      ]
+      ],
+      host: host
     }
   },
   created() {
-      this.axios.get('http://localhost:3000/booktbl')
+      this.axios.get('http://'+this.host+'/booktbl')
         .then((response) => {
           this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
           
@@ -110,7 +110,7 @@ export default {
       console.log(bookInfo.name + ' ' + bookInfo.auth + ' ' + bookInfo.pub + ' ' + bookInfo.price);
     },
   },
-  router: router
+  router: router,
 }
 </script>
 

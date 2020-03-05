@@ -12,18 +12,20 @@
 </template>
 
 <script>
+import host from '../assets/iptable.json'
 export default {
   data () {
     return {
       list: [],
       booklist: [],
       comedata: false,
-      bookdata: false
+      bookdata: false,
+      host: host
     }
   },
   methods: {
     bookGiver() {
-      this.axios.get('http://localhost:3000/booktbl')
+      this.axios.get('http://'+host+'/booktbl')
         .then((response) => {
           this.booklist = JSON.parse(JSON.stringify(response.data))
           this.$emit('bookAdded', this.booklist)
