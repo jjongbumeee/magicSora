@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var multer = require('multer');
 var router = express();
-var db_config = require('../environment.json');
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,9 +14,8 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(express.static('uploads'));
 
-const sequelize = new Sequelize("o2", db_config.user, db_config.password, {
-  host: db_config.host,
-  port: db_config.port,
+const sequelize = new Sequelize("o2", "root", "rbgw5155!", {
+  host: "localhost",
   dialect: "mysql"
 });
 
