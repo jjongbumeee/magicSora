@@ -1,7 +1,7 @@
 <template>
   <ul class="shadow">
-    <div v-for="(bookData) in propsdata" v-bind:key="bookData.bid" id="cs">
-      <img id="bookimg" v-bind:src="`http://localhost:3000/`+bookData.image">
+    <div v-for="(bookData) in propsdata" v-bind:key="bookData.bid">
+      <img id="bookimg" v-bind:src="bookData.image">
       <li>
           책 이름: {{ bookData.name }} <br>
           저자: {{ bookData.auth }}<br>
@@ -30,24 +30,17 @@ export default {
 
 <style scoped>
   ul{
-    /*display: grid;
+    display: grid;
     grid-template-columns: 0.4fr 0.5fr;
-    */
+    /*grid-template-rows: 100px;*/
     padding-left: 0;
     padding : 2%;
     list-style-type: none;
     background: white;
   }
-  #cs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 130px;
-    padding: 5px;
-    margin: 5px;
-  }
   li {
-    font-size: 0.7rem;
-    line-height: 32.5px;
+    font-size: 1.2rem;
+    line-height: 70px;
     text-align: left;
     padding-left: 5%;
   }
@@ -56,21 +49,18 @@ export default {
     height: 100%;
   }
   @media(max-width: 768px) {
-    #cs {
-      grid-template-rows: 200px;
-    }
     li {
-      font-size: 0.9rem;      
-      line-height: 50px;
+      font-size: 1rem;      
+      line-height: 70px;
     }
     ul {
-      grid-template-columns: 0.7fr 0.7fr;
+      grid-template-columns: 0.7fr 1fr;
     }
   }
   @media(max-width: 425px) {
     li {
-      font-size: 0.7rem;
-      line-height: 32.5px;
+      font-size: 0.9rem;
+      line-height: 40px;
     }
     ul {
       grid-template-columns: 1.3fr 1fr;
@@ -80,8 +70,8 @@ export default {
   @media(max-width: 375px) {
     li {
       padding-left: 7%;
-      font-size: 0.7rem;
-      line-height: 32.5px;
+      font-size: 0.6rem;
+      line-height: 30px;
     }
     ul {
       grid-template-columns: 1.3fr 1fr;

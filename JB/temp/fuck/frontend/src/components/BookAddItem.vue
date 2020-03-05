@@ -39,7 +39,6 @@ export default {
       if(allowedTypes.includes(file.type)) {
         this.bookItem.file = file;
       }
-      this.bookItem.image = btoa(this.$refs.refimage.files[0])
     },
     async sendfile() {
       const formData = new FormData();
@@ -48,10 +47,10 @@ export default {
       formData.append('auth', this.bookItem.auth);
       formData.append('pub', this.bookItem.pub);
       formData.append('price', this.bookItem.price);
-      
+
       try {
         await this.axios.post('http://localhost:3000/upload', formData )
-      
+        this.bookItem.file = ""
       } catch(err) {
         console.log(err);
       }
