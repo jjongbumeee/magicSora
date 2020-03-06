@@ -1,1 +1,5 @@
 backend/environment.json
+frontend/src/assets/iptable.json
+backend/public
+backend/node_modules
+frontend/node_modules
