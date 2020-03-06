@@ -53,7 +53,7 @@ export default {
         await this.axios.post('http://'+this.host+'/upload', formData )
         this.bookItem.file = ""
       } catch(err) {
-        console.log(err);
+        //console.log(err);
       }
     },
   }

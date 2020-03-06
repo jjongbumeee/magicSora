@@ -83,7 +83,7 @@ export default {
               bin = bin + String.fromCharCode(this.bookList[i].image.data[j])
             }
             //bin = atob(bin)
-            console.log(bin)
+            //console.log(bin)
             var bytes = new Uint8Array(bin)
             var blob = new Blob([bytes], {type:'image/jpg'})
             this.bookList[i].imageBinary = URL.createObjectURL(blob).substr(5)
@@ -93,11 +93,11 @@ export default {
     },
   methods: {
     searchDB: function(name) {
-      console.log(name + ' DB 검색');
+      //console.log(name + ' DB 검색');
       // DB 코드 추가
       for(var i = 0; i < this.bookList.length; i++) {
         if(this.bookList[i].name === name) {
-          console.log(name + ' 존재');
+          //console.log(name + ' 존재');
         }
       }
     },
@@ -106,9 +106,9 @@ export default {
       this.NotRegStat = !this.NotRegStat;
       // this.$router.go();
     },
-    addItem: function(bookInfo) {
-      console.log(bookInfo.name + ' ' + bookInfo.auth + ' ' + bookInfo.pub + ' ' + bookInfo.price);
-    },
+    //addItem: function(bookInfo) {
+      //console.log(bookInfo.name + ' ' + bookInfo.auth + ' ' + bookInfo.pub + ' ' + bookInfo.price);
+    //},
   },
   router: router,
 }
