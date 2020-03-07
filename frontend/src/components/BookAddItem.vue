@@ -50,7 +50,7 @@ export default {
       formData.append('price', this.bookItem.price);
 
       try {
-        await this.axios.post('http://'+this.host.host+'/upload', formData )
+        await this.axios.post('http://'+this.host+'/upload', formData )
         this.bookItem.file = ""
       } catch(err) {
         //console.log(err);

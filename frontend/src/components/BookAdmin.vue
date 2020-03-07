@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     formGiver () {
-      this.axios.get('http://'+this.host.host+'/admin')
+      this.axios.get('http://'+this.host+'/admin')
         .then((response) => {
           this.list = JSON.parse(JSON.stringify(response.data))
         })
