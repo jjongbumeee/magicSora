@@ -11,7 +11,7 @@
     <span v-on:click="addToggle">돌아가기</span>
     </router-link>
 
-    <router-view v-on:file="gogo"></router-view>
+    <router-view></router-view>
     <book-list v-bind:propsdata="bookList"></book-list>
     <book-footer></book-footer>
   </div>
@@ -75,7 +75,11 @@ export default {
       this.axios.get('http://'+this.host.host+'/booktbl')
         .then((response) => {
           this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
-          
+          for(var i = 0; i < this.bookList.length; i++) {
+            this.bookList[i].filename = this.host.host + '/' + this.bookList[i].image;
+            // console.log(this.bookList[i].filename);
+          }
+          // this.bookList.filename = this.host.host + '/' + this.bookList.image;
           
           /*var img, bin =''
           for(var i = 0; i < this.bookList.length; i++) {
@@ -93,11 +97,6 @@ export default {
         })
     },
   methods: {
-    gogo: function(filename) {
-      this.bookList.filename = this.host.host + '/' + filename.name;
-      console.log(this.bookList.filename);
-
-    },
     searchDB: function(name) {
       //console.log(name + ' DB 검색');
       // DB 코드 추가
