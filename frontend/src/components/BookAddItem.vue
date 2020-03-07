@@ -1,5 +1,5 @@
 <template>
-<form @submit.prevent="sendfile" enctype="multipart/form-data">
+<form @submit="sendfile" enctype="multipart/form-data">
   <div>
     <div class="bookInfo shadow">
       <p>제 목 : <input type="text" v-model="bookItem.name"></p>
