@@ -157,11 +157,11 @@ router.post("/upload", upload.single('file'), (req, res) => {
     name: name,
     auth: auth,
     pub: pub,
-    price: price,
     image: image
   }).then(book => {
     console.log("generated BOOK", book.name);
   });
+  res.send('fuck')
 });
 
 router.use(function (err, req, res, next) {

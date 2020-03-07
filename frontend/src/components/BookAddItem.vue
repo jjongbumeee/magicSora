@@ -48,7 +48,6 @@ export default {
       formData.append('auth', this.bookItem.auth);
       formData.append('pub', this.bookItem.pub);
       formData.append('price', this.bookItem.price);
-      this.$emit('file',this.bookItem.file);
       try {
         await this.axios.post('http://'+this.host.host+'/upload', formData )
         this.bookItem.file = ""
