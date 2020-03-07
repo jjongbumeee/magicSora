@@ -76,7 +76,7 @@ export default {
         .then((response) => {
           this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
           for(var i = 0; i < this.bookList.length; i++) {
-            this.bookList[i].filename = this.host.host + '/' + this.bookList[i].image;
+            this.bookList[i].filename = 'http://'+this.host.host + '/' + this.bookList[i].image;
             // console.log(this.bookList[i].filename);
           }
           // this.bookList.filename = this.host.host + '/' + this.bookList.image;
