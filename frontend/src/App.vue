@@ -71,7 +71,7 @@ export default {
     }
   },
   created() {
-      this.axios.get('http://'+this.host+'/booktbl')
+      this.axios.get('http://'+this.host.host+'/booktbl')
         .then((response) => {
           this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
           
