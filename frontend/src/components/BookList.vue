@@ -1,7 +1,7 @@
 <template>
   <ul class="shadow">
     <div v-for="(bookData) in propsdata" v-bind:key="bookData.bid" id="cs">
-      <img id="bookimg" v-bind:src="`http://`+this.host.host+'/'+bookData.image">
+      <img id="bookimg" src=bookData.host>
       <li>
           책 이름: {{ bookData.name }} <br>
           저자: {{ bookData.auth }}<br>

@@ -11,7 +11,7 @@
     <span v-on:click="addToggle">돌아가기</span>
     </router-link>
 
-    <router-view v-on:bookReg="addItem"></router-view>
+    <router-view></router-view>
     <book-list v-bind:propsdata="bookList"></book-list>
     <book-footer></book-footer>
   </div>
