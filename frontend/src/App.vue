@@ -11,7 +11,7 @@
     <span v-on:click="addToggle">돌아가기</span>
     </router-link>
 
-    <router-view></router-view>
+    <router-view v-on:file="gogo"></router-view>
     <book-list v-bind:propsdata="bookList"></book-list>
     <book-footer></book-footer>
   </div>
@@ -64,10 +64,11 @@ export default {
            bid : 1,
            image : '',
            createdAt: '',
-           updatedAt: ''
+           updatedAt: '',
+           filename : host
          }
       ],
-      host: host
+      host: host,
     }
   },
   created() {
@@ -92,6 +93,11 @@ export default {
         })
     },
   methods: {
+    gogo: function(filename) {
+      this.bookList.filename = this.host.host + '/' + filename.name;
+      console.log(this.bookList.filename);
+
+    },
     searchDB: function(name) {
       //console.log(name + ' DB 검색');
       // DB 코드 추가
