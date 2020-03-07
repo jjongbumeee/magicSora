@@ -77,6 +77,7 @@ export default {
           this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
           
           
+          
           /*var img, bin =''
           for(var i = 0; i < this.bookList.length; i++) {
             img = this.bookList[i].image.data
@@ -95,8 +96,7 @@ export default {
   methods: {
     gogo: function(filename) {
       this.bookList.filename = this.host.host + '/' + filename.name;
-      console.log(this.bookList.filename);
-
+      
     },
     searchDB: function(name) {
       //console.log(name + ' DB 검색');
