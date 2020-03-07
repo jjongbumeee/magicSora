@@ -6,16 +6,18 @@
 </template>
 
 <script>
+import host from '../assets/iptable.json'
 export default {
   data () {
     return {
       list: [],
-      comedata: false
+      comedata: false,
+      host: host
     }
   },
   methods: {
     formGiver () {
-      this.axios.get('http://localhost:3000/admin')
+      this.axios.get('http://'+this.host.host+'/admin')
         .then((response) => {
           this.list = JSON.parse(JSON.stringify(response.data))
         })

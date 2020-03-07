@@ -14,7 +14,7 @@
 </template>
 
 <script>
-
+import host from '../assets/iptable.json'
 export default {
   data: function() {
     return {
@@ -27,6 +27,7 @@ export default {
         output: '',
         file: ''
       },
+      host: host
     }
     
   },
@@ -49,10 +50,10 @@ export default {
       formData.append('price', this.bookItem.price);
 
       try {
-        await this.axios.post('http://localhost:3000/upload', formData )
+        await this.axios.post('http://'+this.host.host+'/upload', formData )
         this.bookItem.file = ""
       } catch(err) {
-        console.log(err);
+        //console.log(err);
       }
     },
   }

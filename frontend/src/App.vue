@@ -11,7 +11,7 @@
     <span v-on:click="addToggle">돌아가기</span>
     </router-link>
 
-    <router-view v-on:bookReg="addItem"></router-view>
+    <router-view></router-view>
     <book-list v-bind:propsdata="bookList"></book-list>
     <book-footer></book-footer>
   </div>
@@ -29,8 +29,7 @@ import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
-
-
+import host from './assets/iptable.json'
 
 export const router = new VueRouter({
   routes: [
@@ -67,11 +66,12 @@ export default {
            createdAt: '',
            updatedAt: ''
          }
-      ]
+      ],
+      host: host
     }
   },
   created() {
-      this.axios.get('http://localhost:3000/booktbl')
+      this.axios.get('http://'+this.host.host+'/booktbl')
         .then((response) => {
           this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
           
@@ -83,7 +83,7 @@ export default {
               bin = bin + String.fromCharCode(this.bookList[i].image.data[j])
             }
             //bin = atob(bin)
-            console.log(bin)
+            //console.log(bin)
             var bytes = new Uint8Array(bin)
             var blob = new Blob([bytes], {type:'image/jpg'})
             this.bookList[i].imageBinary = URL.createObjectURL(blob).substr(5)
@@ -93,11 +93,11 @@ export default {
     },
   methods: {
     searchDB: function(name) {
-      console.log(name + ' DB 검색');
+      //console.log(name + ' DB 검색');
       // DB 코드 추가
       for(var i = 0; i < this.bookList.length; i++) {
         if(this.bookList[i].name === name) {
-          console.log(name + ' 존재');
+          //console.log(name + ' 존재');
         }
       }
     },
@@ -106,11 +106,11 @@ export default {
       this.NotRegStat = !this.NotRegStat;
       // this.$router.go();
     },
-    addItem: function(bookInfo) {
-      console.log(bookInfo.name + ' ' + bookInfo.auth + ' ' + bookInfo.pub + ' ' + bookInfo.price);
-    },
+    //addItem: function(bookInfo) {
+      //console.log(bookInfo.name + ' ' + bookInfo.auth + ' ' + bookInfo.pub + ' ' + bookInfo.price);
+    //},
   },
-  router: router
+  router: router,
 }
 </script>
 
