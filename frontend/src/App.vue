@@ -11,7 +11,7 @@
     <span v-on:click="addToggle">돌아가기</span>
     </router-link>
 
-    <router-view></router-view>
+    <router-view v-on:bookReg="addItem"></router-view>
     <book-list v-bind:propsdata="bookList"></book-list>
     <book-footer></book-footer>
   </div>
@@ -64,16 +64,13 @@ export default {
            bid : 1,
            image : '',
            createdAt: '',
-           updatedAt: '',
-           host: 'http://'+host.host+'/'+this.image
+           updatedAt: ''
          }
       ],
       host: host
     }
   },
   created() {
-    // console.log(this.host);
-    
       this.axios.get('http://'+this.host.host+'/booktbl')
         .then((response) => {
           this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
