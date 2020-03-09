@@ -154,14 +154,16 @@ router.post("/upload", upload.single('file'), (req, res) => {
   const price = req.body.price;
   const image = req.file.filename;
   book.create({
+    
     name: name,
     auth: auth,
     pub: pub,
+    price: price,
     image: image
   }).then(book => {
     console.log("generated BOOK", book.name);
   });
-  res.send('fuck')
+  res.header("Access-Control-Allow-Origin", "*");
 });
 
 router.use(function (err, req, res, next) {

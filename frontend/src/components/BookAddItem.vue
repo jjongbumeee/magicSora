@@ -1,5 +1,5 @@
 <template>
-<form @submit="sendfile" enctype="multipart/form-data">
+<form @submit.prevent="sendfile" enctype="multipart/form-data">
   <div>
     <div class="bookInfo shadow">
       <p>제 목 : <input type="text" v-model="bookItem.name"></p>
@@ -7,7 +7,7 @@
       <p>출판사 : <input type="text" v-model="bookItem.pub"></p>
       <p>금 액 : <input type="text" v-model="bookItem.price"></p>
       <p>사 진 : <input @change='fileSelect' type="file" name="myfile" ref='refimage' accept="image/*;capture=camera" ></p>
-      <button v-on:click="sendfile">등록하기</button>
+      <button type="submit">등록하기</button>
     </div>
   </div>
 </form>

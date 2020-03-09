@@ -2,6 +2,7 @@ backend/environment.json
 frontend/src/assets/iptable.json
 backend/public
 backend/node_modules
+backend/uploads
 frontend/node_module
 frontend/package.json
 backend/package.json
