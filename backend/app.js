@@ -9,11 +9,7 @@ var app = express();
 app.use(cors());
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
-  
-  
-  
-//app.route('/api/img').post(upload.single('img'));
+var dbRouter = require('./routes/db');
 
 //DB parser
 app.use(function (req, res, next) {
@@ -34,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/db', dbRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

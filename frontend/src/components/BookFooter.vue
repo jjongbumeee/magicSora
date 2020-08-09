@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     bookGiver() {
-      this.axios.get('http://'+this.host.host+'/booktbl')
+      this.axios.get('http://'+this.host.host+'/db/booktbl')
         .then((response) => {
           this.booklist = JSON.parse(JSON.stringify(response.data))
           this.$emit('bookAdded', this.booklist)
