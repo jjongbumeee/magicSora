@@ -73,39 +73,36 @@ export default {
   },
   created() {
       this.axios.get('http://'+this.host.host+'/db/booktbl')
-        .then((response) => {
-          this.bookList = response.data//JSON.parse(JSON.stringify(response.data))
+        .then((res) => {
+          this.bookList = res.data//JSON.parse(JSON.stringify(response.data))
           for(var i = 0; i < this.bookList.length; i++) {
             this.bookList[i].filename = 'http://'+this.host.host + '/db/' + this.bookList[i].image;
             // console.log(this.bookList[i].filename);
           }
-          // this.bookList.filename = this.host.host + '/' + this.bookList.image;
-          
-          
-          /*var img, bin =''
-          for(var i = 0; i < this.bookList.length; i++) {
-            img = this.bookList[i].image.data
-            for(var j = 0; j < image.length; j++) { 
-              bin = bin + String.fromCharCode(this.bookList[i].image.data[j])
-            }
-            //bin = atob(bin)
-            //console.log(bin)
-            var bytes = new Uint8Array(bin)
-            var blob = new Blob([bytes], {type:'image/jpg'})
-            this.bookList[i].imageBinary = URL.createObjectURL(blob).substr(5)
-            URL.revokeObjectURL(blob)
-          }*/
+
         })
     },
   methods: {
-    searchDB: function(name) {
+    searchDB: function(name) { // express에서 책 제목을 이용한 Select Query 구현 (책 제목으로 책 1개만)
       //console.log(name + ' DB 검색');
-      // DB 코드 추가
+      // DB 코드 
+      console.log(name);
+      this.axios.post(`http://${this.host.host}/db/bookSearch`,
+        {
+          query: name
+        })
+      .then((res) => {
+        console.log(res);
+        this.bookList = res; // backend에서 보낸 book
+      }).catch(error => {
+        console.log('Failed', error);
+      })
+      /*
       for(var i = 0; i < this.bookList.length; i++) {
         if(this.bookList[i].name === name) {
           //console.log(name + ' 존재');
         }
-      }
+      }*/
     },
     addToggle: function() {
       this.regStatus = !this.regStatus;

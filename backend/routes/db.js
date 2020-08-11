@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
-var router = express();
 var db_config = require('../environment.json');
 
 const bodyParser = require("body-parser");
@@ -76,7 +75,13 @@ const book = sequelize.define(
 );
 sequelize.sync({ alter: true });
 
-
+router.post("/bookSearch", (req,res) => {
+    const name = req.body.query;
+    book.findOne({ where: {name: name }}).then(book => {
+        res.send(book);
+    })
+    
+})
 
 router.post("/admin_receiver", (request, response) => {
     const id = request.body.id;
@@ -113,6 +118,16 @@ router.options("/admintbl", (req, res) => {
 });
 
 router.options("/booktbl", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization, Content-Length, X-Requested-With"
+    );
+    res.send();
+});
+
+router.options("/BookSearch", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
     res.header(
@@ -166,7 +181,7 @@ router.use(function (err, req, res, next) {
         return;
     }
     if (err.code === "LIMIT_FILE_SIZE") {
-        res.status(422).json({ error: `Too large. MAx size is ${MAX_SIZE / 1000}K` });
+        res.status(422).json({ error: `Too large. MAX size is ${MAX_SIZE / 1000}K` });
     }
 })
 
