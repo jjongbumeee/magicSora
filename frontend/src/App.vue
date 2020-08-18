@@ -83,10 +83,7 @@ export default {
         })
     },
   methods: {
-    searchDB: function(name) { // express에서 책 제목을 이용한 Select Query 구현 (책 제목으로 책 1개만)
-      //console.log(name + ' DB 검색');
-      // DB 코드 
-      console.log(name);
+    searchDB: function(name) { // express에서 책 제목을 이용한 Select Query 구현 - 넘어온 객체 파싱해서 보여주기 필요
       this.axios.post(`http://${this.host.host}/db/bookSearch`,
         {
           query: name
@@ -97,12 +94,6 @@ export default {
       }).catch(error => {
         console.log('Failed', error);
       })
-      /*
-      for(var i = 0; i < this.bookList.length; i++) {
-        if(this.bookList[i].name === name) {
-          //console.log(name + ' 존재');
-        }
-      }*/
     },
     addToggle: function() {
       this.regStatus = !this.regStatus;

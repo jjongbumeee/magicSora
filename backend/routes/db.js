@@ -5,6 +5,7 @@ var db_config = require('../environment.json');
 
 const bodyParser = require("body-parser");
 const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(express.static('uploads'));
@@ -39,7 +40,6 @@ const admin = sequelize.define(
 const book = sequelize.define(
     "book",
     {
-
         bid: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -63,7 +63,7 @@ const book = sequelize.define(
         },
         image: {
             type: Sequelize.STRING,
-            allowNULL: false
+            allowNULL: true
 
         }
     },
@@ -75,23 +75,35 @@ const book = sequelize.define(
 );
 sequelize.sync({ alter: true });
 
-router.post("/bookSearch", (req,res) => {
+router.post("/bookSearch", (req,res) => { // 책 이름으로 search하기 위한 select 문
     const name = req.body.query;
+    book.findAll({
+        where: { name: { [Op.like] : "%" + name  + "%" } },
+        order: [['bid', 'ASC']]
+    })
+    .then(books => {
+        res.send(books);
+    })
+    .catch(err => {
+        console.log(err);
+    })
+    /*
     book.findOne({ where: {name: name }}).then(book => {
         res.send(book);
     })
+    */
     
 })
 
-router.post("/admin_receiver", (request, response) => {
-    const id = request.body.id;
-    const password = request.body.password;
+router.post("/admin_receiver", (req, res) => {
+    const id = req.body.id;
+    const password = req.body.password;
     console.log(id, password);
     //res.header("Access-Control-Allow-Origin", "*");
     admin.create({ id: id, password: password }).then(admin => {
         console.log("generated ID", admin.id);
     });
-    response.send(id + "///" + password);
+    res.send(id + "///" + password);
 });
 
 router.get("/booktbl", (req, res) => {
@@ -127,6 +139,7 @@ router.options("/booktbl", (req, res) => {
     res.send();
 });
 
+/*
 router.options("/BookSearch", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -136,6 +149,7 @@ router.options("/BookSearch", (req, res) => {
     );
     res.send();
 });
+*/
 
 //upload
 const storage = multer.diskStorage({
