@@ -23,12 +23,12 @@
   - `/frontend/src/assets/iptable.json` 파일생성
   - `{"host" : "DB주소"}` 입력 후 저장
   - ex) {"host" : "http://localhost:3000"}  
-  
+
   - `/backend/environment.json` 파일 생성
   - `{"host" : "DB host 주소",  
     "user" : "DB username",  
     "password" : "DB PW",  
-    "port" : "DB port 번호"}  입력 후 저장
+    "port" : "DB port 번호"}`  입력 후 저장
 - Frontend(Vue.js) dev 서버 실행 방법
   > npm run serve  
 - Frontend 빌드 방법
