@@ -72,27 +72,31 @@ export default {
     }
   },
   created() {
-      this.axios.get('http://'+this.host.host+'/db/booktbl')
+      this.axios.get(this.host.host+'/db/booktbl')
         .then((res) => {
           this.bookList = res.data//JSON.parse(JSON.stringify(response.data))
           for(var i = 0; i < this.bookList.length; i++) {
-            this.bookList[i].filename = 'http://'+this.host.host + '/db/' + this.bookList[i].image;
-            // console.log(this.bookList[i].filename);
+            this.bookList[i].filename = this.host.host + '/db/' + this.bookList[i].image;
           }
-
         })
     },
   methods: {
     searchDB: function(name) { // express에서 책 제목을 이용한 Select Query 구현 - 넘어온 객체 파싱해서 보여주기 필요
-      this.axios.post(`http://${this.host.host}/db/bookSearch`,
+      this.axios.post(`${this.host.host}/db/bookSearch`,
         {
           query: name
         })
       .then((res) => {
-        console.log(res);
-        this.bookList = res; // backend에서 보낸 book
+        this.bookList = res.data;
+
+        for(let i = 0; i < res.data.length; i++) {
+          // console.log(this.bookList[i]);
+          this.bookList[i].filename = this.host.host + '/db/' + this.bookList[i].image;
+        }
+        this.bookList = res.data; // backend에서 보낸 book
+
       }).catch(error => {
-        console.log('Failed', error);
+        console.log('HTTP Request Failed', error);
       })
     },
     addToggle: function() {
