@@ -12,10 +12,24 @@
 ---
 ## Project Settings
 - B/E, F/E 구분하여 구성되었으며, npm을 이용하여 관리
-- Backend 실행 방법(mysql이 설정되어 있어야 함)
+- F/E, B/E 프로젝트 Clone 이후 각각 npm install 실행
+  > cd backend  
+  npm install  
+  cd ../frontend  
+  npm install
+- Backend(Express) 실행 방법(mysql이 설정되어 있어야 함)
   > npm start  
-- Frontend 개발용 실행 방법
-  - DB 연결 주소 입력 : `/frontend/src/assets/iptable.json` 파일에 `{"host" : "DB주소"}` 입력 이후
+- DB 연결 주소 입력
+  - `/frontend/src/assets/iptable.json` 파일생성
+  - `{"host" : "DB주소"}` 입력 후 저장
+  - ex) {"host" : "http://localhost:3000"}  
+  
+  - `/backend/environment.json` 파일 생성
+  - `{"host" : "DB host 주소",  
+    "user" : "DB username",  
+    "password" : "DB PW",  
+    "port" : "DB port 번호"}  입력 후 저장
+- Frontend(Vue.js) dev 서버 실행 방법
   > npm run serve  
 - Frontend 빌드 방법
   > npm run build
