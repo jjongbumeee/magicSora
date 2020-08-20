@@ -157,7 +157,7 @@ router.post("/bookDelete", (req, res) => {
 
 
 // login
-router.post("/adminLogin", (req, res) => {
+router.post("/adminLogin", async function(req, res, next) {
     const id = req.body.id;
     const password = req.body.password;
     console.log(id, password);
@@ -173,7 +173,7 @@ router.post("/adminLogin", (req, res) => {
         console.log("비밀번호 일치");
         // 쿠키
         res.cookie("admin", id, {
-            expires: new Date(Date.now() + 900000),
+            expires: new Date(Date.now() + 9000),
             httpOnly: true
         });
         res.redirect("/admin");

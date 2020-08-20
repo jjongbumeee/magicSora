@@ -21,7 +21,6 @@
 import BookHeader from './components/BookHeader.vue'
 import BookSearch from './components/BookSearch.vue'
 import BookList from './components/BookList.vue'
-import BookFooter from './components/BookFooter.vue'
 import BookAddItem from './components/BookAddItem.vue'
 import Vue from 'vue'
 import axios from 'axios'
@@ -48,8 +47,7 @@ export default {
   components:{
     'book-header': BookHeader,
     'book-search': BookSearch,
-    'book-list': BookList,
-    'book-footer': BookFooter
+    'book-list': BookList
   },
   data: function() {
     return {
