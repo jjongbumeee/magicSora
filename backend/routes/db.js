@@ -5,11 +5,13 @@ var db_config = require('../environment.json');
 
 const bodyParser = require("body-parser");
 const Sequelize = require("sequelize");
+const { and } = require('sequelize');
 const Op = Sequelize.Op;
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(express.static('uploads'));
 
+// db orm sequelize
 const sequelize = new Sequelize("o2", db_config.user, db_config.password, {
     host: db_config.host,
     port: db_config.port,
@@ -75,6 +77,7 @@ const book = sequelize.define(
 );
 sequelize.sync({ alter: true });
 
+// search
 router.post("/bookSearch", (req,res) => { // 책 이름으로 search하기 위한 select 문
     const name = req.body.query;
     book.findAll({
@@ -87,71 +90,9 @@ router.post("/bookSearch", (req,res) => { // 책 이름으로 search하기 위�
     .catch(err => {
         console.log(err);
     })
-    /*
-    book.findOne({ where: {name: name }}).then(book => {
-        res.send(book);
-    })
-    */
-    
 })
 
-router.post("/admin_receiver", (req, res) => {
-    const id = req.body.id;
-    const password = req.body.password;
-    console.log(id, password);
-    //res.header("Access-Control-Allow-Origin", "*");
-    admin.create({ id: id, password: password }).then(admin => {
-        console.log("generated ID", admin.id);
-    });
-    res.send(id + "///" + password);
-});
-
-router.get("/booktbl", (req, res) => {
-    book.findAll().then(booktbl => {
-        res.send(booktbl);
-    });
-});
-
-router.get("/admintbl", (req, res) => {
-    admin.findAll().then(admintbl => {
-        res.send(admintbl);
-    });
-});
-
-
-router.options("/admintbl", (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Content-Type, Authorization, Content-Length, X-Requested-With"
-    );
-    res.send();
-});
-
-router.options("/booktbl", (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Content-Type, Authorization, Content-Length, X-Requested-With"
-    );
-    res.send();
-});
-
-/*
-router.options("/BookSearch", (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Content-Type, Authorization, Content-Length, X-Requested-With"
-    );
-    res.send();
-});
-*/
-
-//upload
+// upload
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './uploads/');
@@ -198,5 +139,56 @@ router.use(function (err, req, res, next) {
         res.status(422).json({ error: `Too large. MAX size is ${MAX_SIZE / 1000}K` });
     }
 })
+
+// delete
+router.post("/bookDelete", (req, res) => {
+    const bid = req.body.bid;
+    
+    book.destroy({
+        where: {bid: bid}
+    })
+    .then(result => {
+        res.send("삭제");
+    })
+    .catch(err => {
+        console.error(err);
+    });
+})
+
+
+// login
+router.post("/adminLogin", (req, res) => {
+    const id = req.body.id;
+    const password = req.body.password;
+    console.log(id, password);
+    //res.header("Access-Control-Allow-Origin", "*");
+    const result = await admin.findOne({
+        where: {id: id}
+    });
+
+    const dbpassword = result.dataValues.password;
+    // salt와 해싱 추가
+
+    if(dbpassword === password) {
+        console.log("비밀번호 일치");
+        // 쿠키
+        res.cookie("admin", id, {
+            expires: new Date(Date.now() + 900000),
+            httpOnly: true
+        });
+        res.redirect("/admin");
+    }
+    else {
+        console.log("비밀번호 불일치");
+        res.redirect("/");
+    }
+});
+
+// show book
+router.get("/booktbl", (req, res) => {
+    book.findAll().then(booktbl => {
+        res.send(booktbl);
+    });
+});
 
 module.exports = router;
