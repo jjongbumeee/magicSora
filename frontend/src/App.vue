@@ -13,7 +13,6 @@
 
     <router-view></router-view>
     <book-list v-bind:propsdata="bookList"></book-list>
-    <book-footer></book-footer>
   </div>
 </template>
 
