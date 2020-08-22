@@ -15,7 +15,6 @@
 
     <router-view></router-view>
     <book-list v-bind:propsdata="bookList" v-on:refresh="refreshItem"></book-list>
-    <book-footer></book-footer>
   </div>
 </template>
 
