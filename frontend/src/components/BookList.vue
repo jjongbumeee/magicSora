@@ -8,11 +8,13 @@
           출판사: {{ bookData.pub }}<br>
           가격: {{ bookData.price | currency }}    
       </li>
+      <button v-on:click="bookDelete(bookData.bid)">삭제</button>
     </div>
   </ul>
 </template>
 <script>
 import host from '../assets/iptable.json'
+// import axios from 'axios';
 export default {
   props: ['propsdata'],
   filters: {
@@ -25,6 +27,18 @@ export default {
   data: function() {
     return {
       host: host
+    }
+  },
+  methods: {
+    bookDelete : async function(bid) {
+      try{
+        const deleteObj = {
+          bid : bid,
+        }
+        await this.axios.post(this.host.host+'/db/bookDelete', deleteObj)
+      } catch(err) {
+        console.log(err);
+      }
     }
   }
 }
@@ -39,21 +53,22 @@ export default {
     background: white;
   }
   #cs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 5px;
-    margin: 5px;
+    /* margin: 15px; */
   }
   li {
-    font-size: 0.7rem;
+    font-size: 1.0em;
     line-height: 32.5px;
     text-align: left;
     padding-left: 5%;
+    padding-right: 10%;
   }
   #bookimg {
-    width: 100%;
-    height: 100%;
+    width: 10rem;
+    height: 15rem;
   }
   @media(max-width: 768px) {
     #cs {
