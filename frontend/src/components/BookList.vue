@@ -14,7 +14,7 @@
 </template>
 <script>
 import host from '../assets/iptable.json'
-// import axios from 'axios';
+
 export default {
   props: ['propsdata'],
   filters: {
@@ -36,6 +36,7 @@ export default {
           bid : bid,
         }
         await this.axios.post(this.host.host+'/db/bookDelete', deleteObj)
+        this.$emit('refresh');
       } catch(err) {
         console.log(err);
       }

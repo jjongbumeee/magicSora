@@ -1,18 +1,20 @@
 <template>
   <div>
-    <book-header></book-header>
+    <router-link to="/">
+    <book-header v-on:click="addToggle"></book-header>
+    </router-link>
     <book-search v-on:search="searchDB"></book-search>
 
     <router-link to="/addBook" class="addBtn" v-bind:class="{NotRegStat: regStatus}">
     <span v-on:click="addToggle">책 등록하기</span>
     </router-link>
 
-    <router-link to="/" class="addBtn" v-bind:class="{bookReg: regStatus}">
+    <!-- <router-link to="/" class="addBtn" v-bind:class="{bookReg: regStatus}">
     <span v-on:click="addToggle">돌아가기</span>
-    </router-link>
+    </router-link> -->
 
     <router-view></router-view>
-    <book-list v-bind:propsdata="bookList"></book-list>
+    <book-list v-bind:propsdata="bookList" v-on:refresh="refreshItem"></book-list>
     <book-footer></book-footer>
   </div>
 </template>
@@ -70,14 +72,9 @@ export default {
     }
   },
   created() {
-      this.axios.get(this.host.host+'/db/booktbl')
-        .then((res) => {
-          this.bookList = res.data//JSON.parse(JSON.stringify(response.data))
-          for(var i = 0; i < this.bookList.length; i++) {
-            this.bookList[i].filename = this.host.host + '/db/' + this.bookList[i].image;
-          }
-        })
-    },
+    this.bookList = [];
+    this.refreshItem();
+  },
   methods: {
     searchDB: function(name) { // express에서 책 제목을 이용한 Select Query 구현 - 넘어온 객체 파싱해서 보여주기 필요
       this.axios.post(`${this.host.host}/db/bookSearch`,
@@ -102,6 +99,15 @@ export default {
       this.NotRegStat = !this.NotRegStat;
       // this.$router.go();
     },
+    refreshItem: function() {
+      this.axios.get(this.host.host+'/db/booktbl')
+      .then((res) => {
+        this.bookList = res.data//JSON.parse(JSON.stringify(response.data))
+        for(var i = 0; i < this.bookList.length; i++) {
+          this.bookList[i].filename = this.host.host + '/db/' + this.bookList[i].image;
+        }
+      })
+    }
     //addItem: function(bookInfo) {
       //console.log(bookInfo.name + ' ' + bookInfo.auth + ' ' + bookInfo.pub + ' ' + bookInfo.price);
     //},

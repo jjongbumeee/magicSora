@@ -14,6 +14,8 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import axios from 'axios';
 import host from '../assets/iptable.json'
 export default {
   data: function() {
@@ -49,10 +51,12 @@ export default {
       formData.append('pub', this.bookItem.pub);
       formData.append('price', this.bookItem.price);
       try {
-        await this.axios.post(this.host.host+'/db/upload', formData )
+        console.log(axios);
+        await axios.post(this.host.host+'/db/upload', formData );
+        console.log(this.host.host);
         this.bookItem.file = ""
       } catch(err) {
-        //console.log(err);
+        console.log(err);
       }
     },
   }
