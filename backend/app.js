@@ -9,6 +9,7 @@ const app = express();
 app.use(cors());
 const indexRouter = require('./routes/index');
 const bookRouter = require('./routes/book');
+const adminRouter = require('./routes/admin');
 
 // cors setting
 app.use(function (req, res, next) {
@@ -33,6 +34,7 @@ app.use(auth.initialize());
 // Router 설정
 app.use('/', indexRouter);
 app.use('/book', bookRouter);
+app.use('/admin', adminRouter);
 
 // sequelize
 const sequelize = require("./models").sequelize;
