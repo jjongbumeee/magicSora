@@ -30,8 +30,8 @@ router.post('/login', (req, res) => {
     }
 });
 
-router.get('/adminCheck', auth.authenticate(), (req, res => {
+router.get('/adminCheck', auth.authenticate(), (req, res) => {
     res.send(req.query);
-}));
+});
 
 module.exports = router;
