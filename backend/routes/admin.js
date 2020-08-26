@@ -1,61 +1,37 @@
-let express = require("express");
-let router = express.Router();
-let db_config = require("../environment.json");
+var express = require("express");
+var router = express.Router();
+var jwt = require("jwt-simple");
+var auth = require("./auth")();
+var admin = require("../models").admin;
+var cfg = require("../config/jwt_config");
 
-const bodyParser = require("body-parser");
-const Sequelize = require("sequelize");
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({ extended: false }));
-
-// db orm sequelize
-const sequelize = new Sequelize("o2", db_config.user, db_config.password, {
-    host: db_config.host,
-    port: db_config.port,
-    dialect: "mysql"
-});
-
-const admin = sequelize.define(
-    "admin",
-    {
-        // attributes
-        id: {
-            type: Sequelize.STRING,
-            allowNUll: false,
-            primaryKey: true
-        },
-        password: {
-            type: Sequelize.STRING,
-            allowNULL: false
+router.post('/login', (req, res) => {
+    if(req.body.id && req.body.password) {
+        const id = req.body.id;
+        const password = req.body.password;
+        const query = admin.find( check => {
+            return check.id === id && check.password === password;
+        });
+        if (query) {
+            const payload = {
+                id: query.id
+            };
+            const token = jwt.encode(payload, cfg.jwtSecret);
+            res.json({
+                token: token
+            });
         }
-    },
-    {
-        freezeTableName: true,
-        timestamps: true
-        // options
-    },
-
-);
-
-// login
-router.post("/login", async function(req, res, next) {
-    const id = req.body.id;
-    const password = req.body.password;
-    console.log(id, password);
-    //res.header("Access-Control-Allow-Origin", "*");
-    const result = await admin.findOne({
-        where: {id: id}
-    });
-
-    const dbpassword = result.dataValues.password;
-
-    if(dbpassword === password) {
-        console.log("비밀번호 일치");
-        res.send("로그인 확인");
-        // 로그인 체크
+        else {
+            res.sendStatus(401);
+        }
     }
     else {
-        console.log("비밀번호 불일치");
+        res.sendStatus(401);
     }
 });
+
+router.get('/adminCheck', auth.authenticate(), (req, res => {
+    res.send(req.query);
+}));
 
 module.exports = router;

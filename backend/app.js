@@ -1,17 +1,16 @@
-let createError = require('http-errors');
-let path = require('path');
-let logger = require('morgan');
-let cookieParser = require('cookie-parser');
-let cors = require('cors');
-let express = require('express');
+const createError = require('http-errors');
+const path = require('path');
+const logger = require('morgan');
+const cors = require('cors');
+const express = require('express');
+const auth = require('./routes/auth')();
+const app = express();
 
-let app = express();
 app.use(cors());
-let indexRouter = require('./routes/index');
-let usersRouter = require('./routes/users');
-let bookRouter = require('./routes/book');
-let adminRouter = require('./routes/admin');
+const indexRouter = require('./routes/index');
+const bookRouter = require('./routes/book');
 
+// cors setting
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -26,16 +25,19 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 
 
-app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(auth.initialize());
 
 // Router 설정
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/book', bookRouter);
-app.use('/admin', adminRouter);
+
+// sequelize
+const sequelize = require("./models").sequelize;
+sequelize.sync();
+
 
 // catch 404(not found) and forward to error handler
 app.use(function(req, res, next) {

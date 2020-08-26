@@ -1,64 +1,19 @@
-let express = require('express');
-let router = express.Router();
-let multer = require('multer');
-let db_config = require('../environment.json');
+const express = require('express');
+const router = express.Router();
+const multer = require('multer');
 
 const bodyParser = require("body-parser");
-const Sequelize = require("sequelize");
+const book = require('../models').book;
+const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(express.static('uploads'));
 
-// db orm sequelize
-const sequelize = new Sequelize("o2", db_config.user, db_config.password, {
-    host: db_config.host,
-    port: db_config.port,
-    dialect: "mysql"
-});
-
-const book = sequelize.define(
-    "book",
-    {
-        bid: {
-            type: Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        name: {
-            type: Sequelize.STRING,
-            allowNULL: false,
-        },
-        auth: {
-            type: Sequelize.STRING,
-            allowNULL: false
-        },
-        pub: {
-            type: Sequelize.STRING,
-            allowNULL: false
-        },
-        price: {
-            type: Sequelize.INTEGER,
-            allowNULL: false
-        },
-        image: {
-            type: Sequelize.STRING,
-            allowNULL: true
-
-        }
-    },
-    {
-        freezeTableName: true,
-        timeStamps: true
-        // options
-    }
-);
-sequelize.sync({ alter: true });
-
 // search
-router.post("/bookSearch", (req,res) => { // 책 이름으로 search하기 위한 select 문
+router.post("/bookSearch", async (req,res) => { // 책 이름으로 search하기 위한 select 문
     const name = req.body.query;
-    book.findAll({
+    await book.findAll({
         where: { name: { [Op.like] : "%" + name  + "%" } },
         order: [['bid', 'ASC']]
     })
@@ -88,15 +43,13 @@ const upload = multer({
     storage: storage,
 })
 
-
-router.post("/upload", upload.single('file'), (req, res) => {
-    //res.json({ file: req.file });
+router.post("/upload", upload.single('file'), async (req, res) => {
     const name = req.body.name;
     const auth = req.body.auth;
     const pub = req.body.pub;
     const price = req.body.price;
     const image = req.file.filename;
-    book.create({
+    await book.create({
         name: name,
         auth: auth,
         pub: pub,
@@ -104,8 +57,9 @@ router.post("/upload", upload.single('file'), (req, res) => {
         image: image
     }).then(book => {
         console.log("generated BOOK", book.name);
-    });
-    res.header("Access-Control-Allow-Origin", "*");
+    }).catch(err => {
+        console.error(err);
+    })
 });
 
 router.use(function (err, req, res, next) {
@@ -119,10 +73,10 @@ router.use(function (err, req, res, next) {
 })
 
 // delete
-router.post("/bookDelete", (req, res) => {
+router.post("/bookDelete", async (req, res) => {
     const bid = req.body.bid;
     
-    book.destroy({
+    await book.destroy({
         where: {bid: bid}
     })
     .then(result => {
@@ -134,9 +88,12 @@ router.post("/bookDelete", (req, res) => {
 })
 
 // show book
-router.get("/booktbl", (req, res) => {
-    book.findAll().then(booktbl => {
-        res.send(booktbl);
+router.get("/booktbl", async (req, res, next) => {
+    await book.findAll().then(booktbl => {
+    res.send(booktbl);
+    })
+    .catch(err => {
+        console.error(err);
     });
 });
 
