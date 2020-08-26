@@ -9,12 +9,15 @@ router.post('/login', (req, res) => {
     if(req.body.id && req.body.password) {
         const id = req.body.id;
         const password = req.body.password;
-        const query = admin.find( check => {
-            return check.id === id && check.password === password;
+
+        const query = admin.findOne({
+            where : {id : id}
         });
-        if (query) {
+        const check = (query.id === id && password === query.password);
+        if (check) {
             const payload = {
-                id: query.id
+                id: query.id,
+                password: query.password
             };
             const token = jwt.encode(payload, cfg.jwtSecret);
             res.json({
@@ -30,8 +33,8 @@ router.post('/login', (req, res) => {
     }
 });
 
-router.get('/adminCheck', auth.authenticate(), (req, res => {
+router.get('/adminCheck', auth.authenticate(), (req, res) => {
     res.send(req.query);
-}));
+});
 
 module.exports = router;

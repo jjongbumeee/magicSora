@@ -13,12 +13,12 @@ const params = {
 
 module.exports = function () {
   const strategy = new Strategy(params, function (payload, done) {
-    const check = admin.find(function (input) {
-      return input.id === payload.id;
+    const query = admin.findOne({
+      where: { id: payload.id }
     });
-    if (check) {
+    if (query) {
       return done(null, {
-        id: check.id,
+        id: query.id
       });
     } else {
       return done(new Error("User not found"), null);
