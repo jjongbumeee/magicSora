@@ -69,17 +69,17 @@ export default {
     }
   },
   created() {
-      this.axios.get(this.host.host+'/db/booktbl')
+      this.axios.get(this.host.host+'/book/booktbl')
         .then((res) => {
           this.bookList = res.data//JSON.parse(JSON.stringify(response.data))
           for(var i = 0; i < this.bookList.length; i++) {
-            this.bookList[i].filename = this.host.host + '/db/' + this.bookList[i].image;
+            this.bookList[i].filename = this.host.host + '/book/' + this.bookList[i].image;
           }
         })
     },
   methods: {
     searchDB: function(name) { // express에서 책 제목을 이용한 Select Query 구현 - 넘어온 객체 파싱해서 보여주기 필요
-      this.axios.post(`${this.host.host}/db/bookSearch`,
+      this.axios.post(`${this.host.host}/book/bookSearch`,
         {
           query: name
         })
@@ -88,7 +88,7 @@ export default {
 
         for(let i = 0; i < res.data.length; i++) {
           // console.log(this.bookList[i]);
-          this.bookList[i].filename = this.host.host + '/db/' + this.bookList[i].image;
+          this.bookList[i].filename = this.host.host + '/book/' + this.bookList[i].image;
         }
         this.bookList = res.data; // backend에서 보낸 book
 

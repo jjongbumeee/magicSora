@@ -35,7 +35,7 @@ export default {
         const deleteObj = {
           bid : bid,
         }
-        await this.axios.post(this.host.host+'/db/bookDelete', deleteObj)
+        await this.axios.post(this.host.host+'/book/bookDelete', deleteObj)
       } catch(err) {
         console.log(err);
       }

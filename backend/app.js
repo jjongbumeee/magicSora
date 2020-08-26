@@ -1,17 +1,17 @@
-var createError = require('http-errors');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var cors = require('cors');
-var express = require('express');
+let createError = require('http-errors');
+let path = require('path');
+let logger = require('morgan');
+let cookieParser = require('cookie-parser');
+let cors = require('cors');
+let express = require('express');
 
-var app = express();
+let app = express();
 app.use(cors());
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var dbRouter = require('./routes/db');
+let indexRouter = require('./routes/index');
+let usersRouter = require('./routes/users');
+let bookRouter = require('./routes/book');
+let adminRouter = require('./routes/admin');
 
-//DB parser
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -34,7 +34,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Router 설정
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/db', dbRouter);
+app.use('/book', bookRouter);
+app.use('/admin', adminRouter);
 
 // catch 404(not found) and forward to error handler
 app.use(function(req, res, next) {

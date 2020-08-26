@@ -1,11 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var multer = require('multer');
-var db_config = require('../environment.json');
+let express = require('express');
+let router = express.Router();
+let multer = require('multer');
+let db_config = require('../environment.json');
 
 const bodyParser = require("body-parser");
 const Sequelize = require("sequelize");
-const { and } = require('sequelize');
 const Op = Sequelize.Op;
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -18,27 +17,6 @@ const sequelize = new Sequelize("o2", db_config.user, db_config.password, {
     dialect: "mysql"
 });
 
-const admin = sequelize.define(
-    "admin",
-    {
-        // attributes
-        id: {
-            type: Sequelize.STRING,
-            allowNUll: false,
-            primaryKey: true
-        },
-        password: {
-            type: Sequelize.STRING,
-            allowNULL: false
-        }
-    },
-    {
-        freezeTableName: true,
-        timestamps: true
-        // options
-    },
-
-);
 const book = sequelize.define(
     "book",
     {
@@ -148,41 +126,12 @@ router.post("/bookDelete", (req, res) => {
         where: {bid: bid}
     })
     .then(result => {
-        res.send("삭제");
+        res.send("삭제되었습니다.");
     })
     .catch(err => {
         console.error(err);
     });
 })
-
-
-// login
-router.post("/adminLogin", async function(req, res, next) {
-    const id = req.body.id;
-    const password = req.body.password;
-    console.log(id, password);
-    //res.header("Access-Control-Allow-Origin", "*");
-    const result = await admin.findOne({
-        where: {id: id}
-    });
-
-    const dbpassword = result.dataValues.password;
-    // salt와 해싱 추가
-
-    if(dbpassword === password) {
-        console.log("비밀번호 일치");
-        // 쿠키
-        res.cookie("admin", id, {
-            expires: new Date(Date.now() + 9000),
-            httpOnly: true
-        });
-        res.redirect("/admin");
-    }
-    else {
-        console.log("비밀번호 불일치");
-        res.redirect("/");
-    }
-});
 
 // show book
 router.get("/booktbl", (req, res) => {
