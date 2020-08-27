@@ -18,7 +18,7 @@ module.exports = function () {
     });
     if (query) {
       return done(null, {
-        id: query.values.id
+        id: query.dataValues.id
       });
     } else {
       return done(new Error("User not found"), null);

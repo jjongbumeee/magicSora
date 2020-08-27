@@ -1,37 +1,37 @@
 var express = require("express");
 var router = express.Router();
 var jwt = require("jsonwebtoken");
+var jwt_s = require("jwt-simple");
 var admin = require("../models").admin;
 var cfg = require("../config/jwt_config");
 
-router.post('/login', async (req, res) => {
+router.post('/login', (req, res) => {
     if(req.body.id && req.body.password) {
         const id = req.body.id;
         const password = req.body.password;
-        var idDb, pwdDb;
-        await admin.findOne({
+        admin.findOne({
             where : {id : id}
         })
         .then(adminDb => {
-            idDb = adminDb.dataValues.id;
-            pwdDb = adminDb.dataValues.password;
+            const idDb = adminDb.dataValues.id;
+            const pwdDb = adminDb.dataValues.password;
+            const check = (pwdDb === password);
+            if (check) {
+                const payload = {
+                    id: idDb
+                };
+                const token = jwt_s.encode(payload, cfg.jwtSecret);
+                res.json({
+                    token: token
+                });
+            }
+            else {
+                res.sendStatus(401);
+            }
         })
         .catch(err => {
             console.error(err);
         });
-        const check = (idDb == id) && (pwdDb == password);
-        if (check) {
-            const payload = {
-                id: idDb
-            };
-            const token = jwt.encode(payload, cfg.jwtSecret);
-            res.json({
-                token: token
-            });
-        }
-        else {
-            res.sendStatus(401);
-        }
     }
     else {
         res.sendStatus(401);
