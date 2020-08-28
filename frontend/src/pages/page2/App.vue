@@ -15,18 +15,19 @@ export default {
   data: function() {
     return  {
       id : "", 
-      pw : ""
+      pw : "",
+      token : ""
     }
   },
   methods : {
     checkAccount : async function() {
-      // console.log(this.host);
+      let vueInstance = this;
       await axios.post('http://localhost:3000'+`/admin/login`, {
         id: this.id,
         password: this.pw
       })
       .then(function(res) {
-        console.log(res);
+        vueInstance.token = res.data.token;
       })
       .catch(function(err) {
         console.log(err);
