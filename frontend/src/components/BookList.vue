@@ -31,15 +31,10 @@ export default {
   },
   methods: {
     bookDelete : async function(bid) {
-      try{
-        const deleteObj = {
-          bid : bid,
-        }
-        await this.axios.post(this.host.host+'/book/bookDelete', deleteObj)
-        this.$emit('refresh');
-      } catch(err) {
-        console.log(err);
-      }
+      await this.axios.post(this.host.host+'/book/bookDelete', {
+        bid : bid
+      })
+      this.$emit('refresh');
     }
   }
 }

@@ -39,7 +39,7 @@ export const router = new VueRouter({
 });
 
 router.beforeEach(async function(to, from, next) {
-  console.log(vue);
+  // console.log(vue);
   if(to.path == "/adminAccess") {
     console.log("adminPage access");
     await axios.get(host.host + '/admin/adminCheck', {

@@ -7,6 +7,7 @@
       <p>출판사 : <input type="text" v-model="bookItem.pub"></p>
       <p>금 액 : <input type="text" v-model="bookItem.price"></p>
       <p>사 진 : <input @change='fileSelect' type="file" name="myfile" ref='refimage' accept="image/*;capture=camera" ></p>
+      
       <button type="submit">등록하기</button>
     </div>
   </div>
@@ -16,7 +17,8 @@
 <script>
 // eslint-disable-next-line no-unused-vars
 import axios from 'axios';
-import host from '../assets/iptable.json'
+import VueRouter from 'vue-router';
+import host from '../assets/iptable.json';
 export default {
   data: function() {
     return {
@@ -43,20 +45,25 @@ export default {
         this.bookItem.file = file;
       }
     },
-    async sendfile() {
+    sendfile : async function() {
+      console.log(this.$router);
       const formData = new FormData();
       formData.append('file', this.bookItem.file);
       formData.append('name', this.bookItem.name);
       formData.append('auth', this.bookItem.auth);
       formData.append('pub', this.bookItem.pub);
       formData.append('price', this.bookItem.price);
-      try {
-        await axios.post(this.host.host+'/book/upload', formData );
-        console.log(this.host.host);
-        this.bookItem.file = ""
+      try{
+        await axios.post(this.host.host+'/book/upload', formData);
       } catch(err) {
         console.log(err);
       }
+      // this.$emit('restore');
+      this.$router.push({
+        path: '/',
+        params: '',
+      });
+      // this.$router.go(-1);
     },
   }
 }
@@ -64,7 +71,8 @@ export default {
 
 <style scoped>
  bookInfo{
-    display: grid;
+    display: flex;
+    justify-content: left;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 300px;
     padding-left: 0;
@@ -73,7 +81,8 @@ export default {
     background: white;
     font-size: 1.2rem;
     line-height: 70px;
-    text-align: left;
+    /* text-align: center; */
+    /* align-content: left; */
     padding-left: 5%;
   }
 </style>
