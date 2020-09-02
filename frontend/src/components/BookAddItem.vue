@@ -58,12 +58,10 @@ export default {
       } catch(err) {
         console.log(err);
       }
-      // this.$emit('restore');
       this.$router.push({
         path: '/',
         params: '',
       });
-      // this.$router.go(-1);
     },
   }
 }
@@ -81,8 +79,6 @@ export default {
     background: white;
     font-size: 1.2rem;
     line-height: 70px;
-    /* text-align: center; */
-    /* align-content: left; */
     padding-left: 5%;
   }
 </style>

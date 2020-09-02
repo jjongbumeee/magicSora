@@ -77,6 +77,7 @@ export default {
       })
       .then(function(res) {
         vueInstance.token = res.data.token;
+        window.localStorage.setItem('token', res.data.token);
       })
       .catch(function(err) {
         console.log(err);

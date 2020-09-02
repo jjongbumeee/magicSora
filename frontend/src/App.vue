@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-link to="/" class="routerLink">
-      <span v-on:click="addToggle">
+      <span>
         <book-header/>
       </span>
     </router-link>
@@ -22,9 +22,9 @@
     
     <button id="show-modal" @click="showModal = true" style="border : none" 
     v-bind:class="{bookReg : regStatus}">
-      <book-footer/>
+      <book-footer v-bind:propsdata="token" ref="footer"/>
     </button>
-    <modal v-if="showModal" @close="showModal = false">
+    <modal v-if="showModal" @close="showModal = false" @token="getToken">
       <h3 slot="header">Admin Login</h3>
     </modal>
   </div>
@@ -51,10 +51,6 @@ export const router = new VueRouter({
       path: '/addBook',
       name: 'AddBookItem',
       component: BookAddItem,
-      // redirect: to => {
-      //   const {hash,
-      //   if()
-      // }
     },
     {
       path: '/',
@@ -101,7 +97,6 @@ export default {
     }
   },
   created() {
-    
     this.bookList = [];
     this.refreshItem();
     vueInstance = this;
@@ -127,8 +122,6 @@ export default {
     },
     addToggle: function() {
       this.regStatus = !this.regStatus;
-      // this.NotRegStat = !this.NotRegStat;
-      // this.$router.go();
     },
     refreshItem: function() {
       this.axios.get(this.host.host+'/book/booktbl')
@@ -139,19 +132,11 @@ export default {
         }
       })
     },
-    checkAccount : async function() {
-      const vueInstance = this;
-      await axios.post(host.host+`/admin/login`, {
-        id: this.id,
-        password: this.pw
-      })
-      .then(function(res) {
-        vueInstance.token = res.data.token;
-      })
-      .catch(function(err) {
-        console.log(err);
-      })
-    },
+    getToken : function(payload) {
+      console.log(payload);
+      this.token = payload.token;
+      this.$refs.footer.checkAccount();
+    }
   },
   router: router,
 }
