@@ -19,14 +19,12 @@ export default {
   }, 
   methods : {
     checkAccount : async function() {
-      console.log("checkAccount");
       let res = await axios.get(host.host + '/admin/adminCheck', {
         params : {
           token : this.propsdata
         }
       })  
-      console.log(res);
-      this.content = res.data.id + " 로그인 됨";
+      this.content = res.data.id + "님 로그인 됨";
       this.logged = true;
     }
   },

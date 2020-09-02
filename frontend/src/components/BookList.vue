@@ -8,7 +8,9 @@
           출판사: {{ bookData.pub }}<br>
           가격: {{ bookData.price | currency }}    
       </li>
-      <button v-on:click="bookDelete(bookData.bid)">삭제</button>
+      <button 
+      v-bind:class="{loggedOut: !loggedIn}"
+      v-on:click="bookDelete(bookData.bid)">삭제</button>
     </div>
   </ul>
 </template>
@@ -16,7 +18,7 @@
 import host from '../assets/iptable.json'
 
 export default {
-  props: ['propsdata'],
+  props: ['propsdata', 'loggedIn'],
   filters: {
     // 천 단위 기호 출력 (https://bit.ly/2Pf14QT)
     currency: value => {
@@ -31,6 +33,10 @@ export default {
   },
   methods: {
     bookDelete : async function(bid) {
+      if(!this.loggedIn) {
+        console.log("Access Denied! You need admin access");
+        return;
+      }
       await this.axios.post(this.host.host+'/book/bookDelete', {
         bid : bid
       })
@@ -129,5 +135,9 @@ export default {
   display: block;
   width: 3rem;
   border-radius: 0 5px 5px 0;
+}
+.loggedOut {
+  display: none;
+  visibility: hidden;
 }
 </style>

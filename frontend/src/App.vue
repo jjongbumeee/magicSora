@@ -18,6 +18,7 @@
     <router-view/>
     <book-list v-bind:propsdata="bookList" 
     v-on:refresh="refreshItem"
+    v-bind:loggedIn="logged"
     v-bind:class="{bookReg : regStatus}"/>
     
     <button id="show-modal" @click="showModal = true" style="border : none" 
@@ -78,6 +79,7 @@ export default {
   data: function() {
     return {
       regStatus : false,
+      logged : false,
       token : '',
       showModal : false,
       bookList: [
@@ -133,9 +135,11 @@ export default {
       })
     },
     getToken : function(payload) {
-      console.log(payload);
       this.token = payload.token;
-      this.$refs.footer.checkAccount();
+      this.logged = true;
+      setTimeout(() => { // 바로 checkAccount 실행 시 에러 발생함, 시간 간격을 둠
+        this.$refs.footer.checkAccount();
+      }, 100);
     }
   },
   router: router,
