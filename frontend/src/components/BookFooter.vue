@@ -24,8 +24,10 @@ export default {
           token : this.propsdata
         }
       })  
-      this.content = res.data.id + "님 로그인 됨";
-      this.logged = true;
+      if(res) {
+        this.content = res.data.id + "님 로그인 됨";
+        this.logged = true;  
+      }
     }
   },
   props: ['propsdata']
