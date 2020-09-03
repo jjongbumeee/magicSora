@@ -17,18 +17,22 @@
   npm install  
   cd ../frontend  
   npm install
+
 - Backend(Express) 실행 방법(mysql이 설정되어 있어야 함)
   > npm start  
+  dev 서버실행은 `npm run dev` - nodemon 적용  
+
 - DB 연결 주소 입력
-  - `/frontend/src/assets/iptable.json` 파일생성
+  - `/frontend/src/assets/iptable.json` 파일 생성
   - `{"host" : "DB주소"}` 입력 후 저장
   - ex) {"host" : "http://localhost:3000"}  
 
-  - `/backend/environment.json` 파일 생성
+  - `/backend/config/config.json` 파일 생성
   - `{"host" : "DB host 주소",  
-    "user" : "DB username",  
+    "username" : "DB username",  
     "password" : "DB PW",  
-    "port" : "DB port 번호"}`  입력 후 저장
+    "database" : "DB 명"}`  development, test, production 구분하여 입력 후 저장
+
 - Frontend(Vue.js) dev 서버 실행 방법
   > npm run serve  
 - Frontend 빌드 방법

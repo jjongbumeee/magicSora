@@ -5,29 +5,32 @@
         <book-header/>
       </span>
     </router-link>
-    <book-search v-on:search="searchDB"/>
+    <book-search @search="searchDB"/>
 
-    <router-link to="/addBook"
-    v-bind:class="{bookReg : regStatus}"
-    class="routerLink"> 
-      <span v-on:click="addToggle" class="addBtn">
+    <span id="show-modal" @click="showBookModal = true" style="border : none" class="addBtn">
+      책 등록하기
+    </span>
+    <book-modal v-if="showBookModal" @close="showBookModal = false; refreshItem()" >
+      <h3 slot="header">책 등록하기</h3>
+    </book-modal>
+
+    <!-- <router-link to="/addBook" :class="{bookReg : regStatus}" class="routerLink"> 
+      <span @click="addToggle" class="addBtn">
         책 등록하기
       </span>
-    </router-link>
+    </router-link> -->
 
     <router-view/>
-    <book-list v-bind:propsdata="bookList" 
-    v-on:refresh="refreshItem"
-    v-bind:loggedIn="logged"
-    v-bind:class="{bookReg : regStatus}"/>
+    <book-list :propsdata="bookList"
+    @refresh="refreshItem" :loggedIn="logged" :class="{bookReg : regStatus}"/>
     
-    <button id="show-modal" @click="showModal = true" style="border : none" 
-    v-bind:class="{bookReg : regStatus}">
-      <book-footer v-bind:propsdata="token" ref="footer"/>
+    <button id="show-modal" @click="showAdminModal = true" style="border : none" 
+    :class="{bookReg : regStatus}">
+      <book-footer :propsdata="token" ref="footer"/>
     </button>
-    <modal v-if="showModal" @close="showModal = false" @token="getToken">
+    <admin-modal v-if="showAdminModal" @close="showAdminModal = false" @token="getToken">
       <h3 slot="header">Admin Login</h3>
-    </modal>
+    </admin-modal>ㅇ
   </div>
 </template>
 
@@ -35,9 +38,10 @@
 import BookHeader from './components/BookHeader.vue'
 import BookSearch from './components/BookSearch.vue'
 import BookList from './components/BookList.vue'
-import BookAddItem from './components/BookAddItem.vue'
+// import BookAddItem from './components/BookAddItem.vue'
 import BookFooter from './components/BookFooter.vue'
-import ModalView from './components/ModalView.vue'
+import AdminModalView from './components/AdminModalView.vue'
+import BookModalView from './components/BookModalView.vue'
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -48,11 +52,11 @@ import host from './assets/iptable.json'
 var vueInstance;
 export const router = new VueRouter({
   routes: [
-    {
-      path: '/addBook',
-      name: 'AddBookItem',
-      component: BookAddItem,
-    },
+    // { //TODO: 최종 확인 후 불필요한 경우 라우터 제거
+    //   path: '/addBook',
+    //   name: 'AddBookItem',
+    //   component: BookAddItem,
+    // },
     {
       path: '/',
       name: 'MainComponent'
@@ -60,13 +64,13 @@ export const router = new VueRouter({
   ]
 });
 
-router.beforeEach(async function(to, from, next) {
-  if(to.path == "/" && from.path == "/addBook") {
-    vueInstance.addToggle();
-    vueInstance.refreshItem();
-  } 
-  next();
-});
+// router.beforeEach(async function(to, from, next) {
+//   if(to.path == "/" && from.path == "/addBook") {
+//     vueInstance.addToggle();
+//     vueInstance.refreshItem();
+//   } 
+//   next();
+// });
 
 export default {
   components:{
@@ -74,14 +78,16 @@ export default {
     'book-search': BookSearch,
     'book-list': BookList,
     'book-footer': BookFooter,
-    'modal' : ModalView,
+    'admin-modal' : AdminModalView,
+    'book-modal' : BookModalView,
   },
   data: function() {
     return {
       regStatus : false,
       logged : false,
       token : '',
-      showModal : false,
+      showAdminModal : false,
+      showBookModal : false,
       bookList: [
           {
            name : '',
