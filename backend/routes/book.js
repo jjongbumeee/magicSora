@@ -98,9 +98,20 @@ router.get("/booktbl", async (req, res, next) => {
     });
 });
 
-router.post("/bookAccept", async (req, res) => {
+router.post("/Accept", async (req, res) => {
     const bid = req.body.bid;
     await book.update({ isaccept: true }, { where: { bid: bid } })
+    .then(result => {
+        res.json(result);
+    })
+    .catch(err => {
+        console.error(err);
+    });
+})
+
+router.post("/Sell", async (req, res) => {
+    const bid = req.body.bid;
+    await book.update({ issell: true }, { where: { bid: bid } })
     .then(result => {
         res.json(result);
     })
