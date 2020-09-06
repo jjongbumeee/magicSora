@@ -91,11 +91,22 @@ router.post("/bookDelete", async (req, res) => {
 // show book
 router.get("/booktbl", async (req, res, next) => {
     await book.findAll().then(booktbl => {
-    res.send(booktbl);
+        res.send(booktbl);
     })
     .catch(err => {
         console.error(err);
     });
 });
+
+router.post("/bookAccept", async (req, res) => {
+    const bid = req.body.bid;
+    await book.update({ isaccept: true }, { where: { bid: bid } })
+    .then(result => {
+        res.json(result);
+    })
+    .catch(err => {
+        console.error(err);
+    });
+})
 
 module.exports = router;
