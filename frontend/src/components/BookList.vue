@@ -1,16 +1,24 @@
 <template>
   <ul class="shadow">
     <div v-for="(bookData) in propsdata" v-bind:key="bookData.bid" id="cs">
-      <img id="bookimg" :src=bookData.filename>
-      <li>
-          책 이름: {{ bookData.name }} <br>
-          저자: {{ bookData.auth }}<br>
-          출판사: {{ bookData.pub }}<br>
-          가격: {{ bookData.price | currency }}    
+      <img id="bookimg" :src=bookData.filename :class="{selledBook : bookData.issell}">
+      <li :class="{selledBook : bookData.issell}">
+          <p>책 이름: {{ bookData.name }} </p>
+          <p>저자: {{ bookData.auth }}</p>
+          <p>출판사: {{ bookData.pub }}</p>
+          <p>가격: {{ bookData.price | currency }}</p>
       </li>
-      <button 
-      v-bind:class="{loggedOut: !loggedIn}"
-      v-on:click="bookDelete(bookData.bid)">삭제</button>
+      <p v-if="bookData.issell">판매 완료</p>
+      <p>
+        <button :class="{loggedOut: !loggedIn}" @click="bookDelete(bookData.bid)">
+          삭제
+        </button>
+      </p>
+      <p>
+        <button :class="{loggedOut: !loggedIn}" @click="sold(bookData.bid)">
+          판매처리
+        </button>
+      </p>
     </div>
   </ul>
 </template>
@@ -38,28 +46,35 @@ export default {
         return;
       }
       let vueInstance = this;
-      // console.log(window.localStorage.getItem('token'));
       this.axios.get(this.host.host + '/admin/adminCheck', {
         params: {
           token: window.localStorage.getItem('token')
         }
       })
       .then(function(response) {
-        console.log(response);
-        // console.log(this.parentNode);
         vueInstance.axios.post(vueInstance.host.host + '/book/bookDelete', {
           bid : bid
         })
-        // vueInstance.$emit('refresh');
       })
       .catch(function(err) {
         alert("정상적인 접근 경로가 아닙니다.\n페이지를 새로고침 후 다시 시도 해주세요.");
-        // console.log("정상적인 접근 경로가 아닙니다. 페이지를 새로고침 후 다시 시도 해주세요.");
         console.log(err);
       })
       .then(function() {
         vueInstance.$emit('refresh');
       })
+    },
+    sold : function(bid) {
+      let vueInstance = this;
+      this.axios.post(this.host.host + '/book/Sell', {
+        bid : bid
+      })
+      .then(function(response) {
+        vueInstance.$emit('refresh');
+      })
+      .catch(function(err) {
+        console.log(err);
+      }) 
     }
   }
 }
@@ -88,8 +103,9 @@ export default {
     padding-right: 10%;
   }
   #bookimg {
+    max-width: 100%;
     width: 10rem;
-    height: 15rem;
+    height: auto !important;
   }
   @media(max-width: 768px) {
     #cs {
@@ -158,5 +174,11 @@ export default {
 .loggedOut {
   display: none;
   visibility: hidden;
+}
+.selledBook {
+  color: gray;
+  text-decoration: line-through;
+  opacity: 0.5;
+  /* background-color: lightblue; */
 }
 </style>

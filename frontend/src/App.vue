@@ -14,12 +14,6 @@
       <h3 slot="header">판매하실 책을 등록해주세요</h3>
     </book-modal>
 
-    <!-- <router-link to="/addBook" :class="{bookReg : regStatus}" class="routerLink"> 
-      <span @click="addToggle" class="addBtn">
-        책 등록하기
-      </span>
-    </router-link> -->
-
     <router-view/>
     <book-list :propsdata="bookList"
     @refresh="refreshItem" :loggedIn="logged" :class="{bookReg : regStatus}"/>
@@ -98,7 +92,8 @@ export default {
            image : '',
            createdAt: '',
            updatedAt: '',
-           filename : host
+           filename : host,
+           issell : false
          }
       ],
       host: host,
@@ -134,6 +129,7 @@ export default {
     refreshItem: function() {
       this.axios.get(this.host.host+'/book/booktbl')
       .then((res) => {
+        console.log(res);
         this.bookList = res.data//JSON.parse(JSON.stringify(response.data))
         for(var i = 0; i < this.bookList.length; i++) {
           this.bookList[i].filename = this.host.host + '/book/' + this.bookList[i].image;
