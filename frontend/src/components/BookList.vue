@@ -32,15 +32,34 @@ export default {
     }
   },
   methods: {
-    bookDelete : async function(bid) {
+    bookDelete : function(bid) {
       if(!this.loggedIn) {
         console.log("Access Denied! You need admin access");
         return;
       }
-      await this.axios.post(this.host.host+'/book/bookDelete', {
-        bid : bid
+      let vueInstance = this;
+      // console.log(window.localStorage.getItem('token'));
+      this.axios.get(this.host.host + '/admin/adminCheck', {
+        params: {
+          token: window.localStorage.getItem('token')
+        }
       })
-      this.$emit('refresh');
+      .then(function(response) {
+        console.log(response);
+        // console.log(this.parentNode);
+        vueInstance.axios.post(vueInstance.host.host + '/book/bookDelete', {
+          bid : bid
+        })
+        // vueInstance.$emit('refresh');
+      })
+      .catch(function(err) {
+        alert("정상적인 접근 경로가 아닙니다.\n페이지를 새로고침 후 다시 시도 해주세요.");
+        // console.log("정상적인 접근 경로가 아닙니다. 페이지를 새로고침 후 다시 시도 해주세요.");
+        console.log(err);
+      })
+      .then(function() {
+        vueInstance.$emit('refresh');
+      })
     }
   }
 }
