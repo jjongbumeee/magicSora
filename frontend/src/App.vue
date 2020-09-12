@@ -11,7 +11,7 @@
       책 등록하기
     </span>
     <book-modal v-if="showBookModal" @close="showBookModal = false; refreshItem()" >
-      <h3 slot="header">책 등록하기</h3>
+      <h3 slot="header">판매하실 책을 등록해주세요</h3>
     </book-modal>
 
     <!-- <router-link to="/addBook" :class="{bookReg : regStatus}" class="routerLink"> 
@@ -30,7 +30,7 @@
     </button>
     <admin-modal v-if="showAdminModal" @close="showAdminModal = false" @token="getToken">
       <h3 slot="header">Admin Login</h3>
-    </admin-modal>ㅇ
+    </admin-modal>
   </div>
 </template>
 

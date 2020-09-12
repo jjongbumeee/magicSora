@@ -15,7 +15,7 @@
                 <p>제 목 : <input type="text" v-model="bookItem.name"></p>
                 <p>저 자 : <input type="text" v-model="bookItem.auth"></p>
                 <p>출판사 : <input type="text" v-model="bookItem.pub"></p>
-                <p>금 액 : <input type="text" v-model="bookItem.price"></p>
+                <p>판매희망가 : <input type="number" v-model="bookItem.price"></p>
                 <p>사 진 : <input @change='fileSelect' type="file" name="myfile" ref='refimage' accept="image/*;capture=camera" ></p>
               </slot>
             </div>
@@ -42,7 +42,7 @@ export default {
         name: '',
         auth: '',
         pub: '',
-        price: 0,
+        price: 5000,
         image: '',
         output: '',
         file: ''
