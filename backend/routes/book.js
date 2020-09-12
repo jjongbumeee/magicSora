@@ -23,7 +23,7 @@ router.post("/bookSearch", async (req,res) => { // 책 이름으로 search하기
     .catch(err => {
         console.log(err);
     })
-})
+});
 
 // upload
 const storage = multer.diskStorage({
@@ -41,7 +41,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
     storage: storage,
-})
+});
 
 router.post("/upload", upload.single('file'), async (req, res) => {
     const name = req.body.name;
@@ -71,7 +71,7 @@ router.use(function (err, req, res, next) {
     if (err.code === "LIMIT_FILE_SIZE") {
         res.status(422).json({ error: `Too large. MAX size is ${MAX_SIZE / 1000}K` });
     }
-})
+});
 
 // delete
 router.post("/bookDelete", async (req, res) => {
@@ -86,7 +86,7 @@ router.post("/bookDelete", async (req, res) => {
     .catch(err => {
         console.error(err);
     });
-})
+});
 
 // show book
 router.get("/booktbl", async (req, res, next) => {
@@ -95,7 +95,7 @@ router.get("/booktbl", async (req, res, next) => {
     })
     .catch(err => {
         console.error(err);
-    });
+    })
 });
 
 router.post("/Accept", async (req, res) => {
@@ -106,8 +106,20 @@ router.post("/Accept", async (req, res) => {
     })
     .catch(err => {
         console.error(err);
-    });
-})
+    })
+});
+
+router.post("/Accept_false", async (req, res) => {
+  const bid = req.body.bid;
+  await book
+    .update({ isaccept: false }, { where: { bid: bid } })
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+});
 
 router.post("/Sell", async (req, res) => {
     const bid = req.body.bid;
@@ -117,7 +129,19 @@ router.post("/Sell", async (req, res) => {
     })
     .catch(err => {
         console.error(err);
-    });
-})
+    })
+});
+
+router.post("/Sell_false", async (req, res) => {
+  const bid = req.body.bid;
+  await book
+    .update({ issell: false }, { where: { bid: bid } })
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      console.error(err);
+    })
+});
 
 module.exports = router;
