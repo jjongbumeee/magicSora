@@ -14,6 +14,14 @@
       <h3 slot="header">판매하실 책을 등록해주세요</h3>
     </book-modal>
 
+    <span id="show-modal" @click="showReadyModal = true" style="border : none" class="addBtn" v-if="logged">
+      판매 승인
+    </span>
+    <book-accept v-if="showReadyModal" @close="showReadyModal = false; refreshItem()" :propsdata="bookList">
+      <h3 slot="header">판매 승인대기 중인 책</h3>
+    </book-accept>
+
+
     <router-view/>
     <book-list :propsdata="bookList"
     @refresh="refreshItem" :loggedIn="logged" :class="{bookReg : regStatus}"/>
@@ -36,6 +44,7 @@ import BookList from './components/BookList.vue'
 import BookFooter from './components/BookFooter.vue'
 import AdminModalView from './components/AdminModalView.vue'
 import BookModalView from './components/BookModalView.vue'
+import BookAcceptModal from './components/BookAcceptModal.vue'
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -74,6 +83,7 @@ export default {
     'book-footer': BookFooter,
     'admin-modal' : AdminModalView,
     'book-modal' : BookModalView,
+    'book-accept' : BookAcceptModal,
   },
   data: function() {
     return {
@@ -82,6 +92,7 @@ export default {
       token : '',
       showAdminModal : false,
       showBookModal : false,
+      showReadyModal : false,
       bookList: [
           {
            name : '',

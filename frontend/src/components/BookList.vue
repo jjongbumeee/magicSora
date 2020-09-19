@@ -1,24 +1,29 @@
 <template>
   <ul class="shadow">
-    <div v-for="(bookData) in propsdata" v-bind:key="bookData.bid" id="cs">
-      <img id="bookimg" :src=bookData.filename :class="{selledBook : bookData.issell}">
-      <li :class="{selledBook : bookData.issell}">
-          <p>책 이름: {{ bookData.name }} </p>
-          <p>저자: {{ bookData.auth }}</p>
-          <p>출판사: {{ bookData.pub }}</p>
-          <p>가격: {{ bookData.price | currency }}</p>
-      </li>
-      <p v-if="bookData.issell">판매 완료</p>
-      <p>
-        <button :class="{loggedOut: !loggedIn}" @click="bookDelete(bookData.bid)">
-          삭제
-        </button>
-      </p>
-      <p>
-        <button :class="{loggedOut: !loggedIn}" @click="sold(bookData.bid)">
-          판매처리
-        </button>
-      </p>
+    <div v-for="(bookData) in propsdata" :key="bookData.bid">
+      <div v-if="loggedIn || bookData.isaccept" id="cs">
+        <img id="bookimg" :src=bookData.filename :class="{selledBook : bookData.issell}">
+        <li :class="{selledBook : bookData.issell}">
+            <p>책 이름: {{ bookData.name }} </p>
+            <p>저자: {{ bookData.auth }}</p>
+            <p>출판사: {{ bookData.pub }}</p>
+            <p>가격: {{ bookData.price | currency }}</p>
+        </li>
+        <p v-if="bookData.issell">판매 완료</p>
+        <p>
+          <button :class="{loggedOut: !loggedIn}" @click="bookDelete(bookData.bid)">
+            삭제
+          </button>
+        </p>
+        <p :class="{loggedOut: !loggedIn}">
+          <button v-if="!bookData.issell" @click="sold(bookData.bid)">
+            판매처리
+          </button>
+          <button v-if="bookData.issell"  @click="unsold(bookData.bid)">
+            판매취소
+          </button>
+        </p>
+      </div>
     </div>
   </ul>
 </template>
@@ -75,6 +80,18 @@ export default {
       .catch(function(err) {
         console.log(err);
       }) 
+    },
+    unsold : function(bid) {
+      let vueInstance = this;
+      this.axios.post(this.host.host + '/book/Sell_false', {
+        bid : bid
+      })
+      .then(function(res) {
+        vueInstance.$emit('refresh');
+      })
+      .catch(function(err) {
+        console.log(err);
+      })
     }
   }
 }
@@ -173,7 +190,7 @@ export default {
 }
 .loggedOut {
   display: none;
-  visibility: hidden;
+  /* visibility: hidden; */
 }
 .selledBook {
   color: gray;
