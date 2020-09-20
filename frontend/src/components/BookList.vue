@@ -45,7 +45,7 @@ export default {
     }
   },
   methods: {
-    bookDelete : function(bid) {
+    bookDelete : async function(bid) {
       if(!this.loggedIn) {
         console.log("Access Denied! You need admin access");
         return;
@@ -65,7 +65,7 @@ export default {
         alert("정상적인 접근 경로가 아닙니다.\n페이지를 새로고침 후 다시 시도 해주세요.");
         console.log(err);
       })
-      .then(function() {
+      .then(await function() {
         vueInstance.$emit('refresh');
       })
     },

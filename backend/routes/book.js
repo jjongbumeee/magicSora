@@ -5,6 +5,8 @@ const multer = require('multer');
 const bodyParser = require("body-parser");
 const book = require('../models').book;
 const Sequelize = require('sequelize');
+const fs = require('fs');
+const { col } = require('sequelize');
 const Op = Sequelize.Op;
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -57,7 +59,8 @@ router.post("/upload", upload.single('file'), async (req, res) => {
         image: image
     }).then(book => {
         console.log("generated BOOK", book.name);
-        res.send(book.bid);
+        // type 변환을 위해 "" 삽입
+        res.send({ bid: book.bid });
     }).catch(err => {
         console.error(err);
     })
@@ -76,14 +79,22 @@ router.use(function (err, req, res, next) {
 // delete
 router.post("/bookDelete", async (req, res) => {
     const bid = req.body.bid;
-    
-    await book.destroy({
+
+    await book.findOne({
         where: {bid: bid}
-    })
-    .then(result => {
-        res.send("삭제되었습니다.");
-    })
-    .catch(err => {
+    }).then(table => {
+        fs.unlink('./uploads/'+table.image, result => {
+            console.log(result);
+        });
+
+        book.destroy({
+            where: { bid: bid }
+        }).then(result => {
+        }).catch(err => {
+            console.error(err);
+        });
+        res.send("완료");
+    }).catch(err => {
         console.error(err);
     });
 });
@@ -92,8 +103,7 @@ router.post("/bookDelete", async (req, res) => {
 router.get("/booktbl", async (req, res, next) => {
     await book.findAll().then(booktbl => {
         res.send(booktbl);
-    })
-    .catch(err => {
+    }).catch(err => {
         console.error(err);
     })
 });
@@ -103,8 +113,7 @@ router.post("/Accept", async (req, res) => {
     await book.update({ isaccept: true }, { where: { bid: bid } })
     .then(result => {
         res.json(result);
-    })
-    .catch(err => {
+    }).catch(err => {
         console.error(err);
     })
 });
@@ -112,22 +121,20 @@ router.post("/Accept", async (req, res) => {
 router.post("/Accept_false", async (req, res) => {
   const bid = req.body.bid;
   await book
-    .update({ isaccept: false }, { where: { bid: bid } })
-    .then((result) => {
+    .update({ isaccept: false }, { where: { bid: bid } 
+    }).then((result) => {
       res.json(result);
-    })
-    .catch((err) => {
+    }).catch((err) => {
       console.error(err);
     })
 });
 
 router.post("/Sell", async (req, res) => {
     const bid = req.body.bid;
-    await book.update({ issell: true }, { where: { bid: bid } })
-    .then(result => {
+    await book.update({ issell: true }, { where: { bid: bid }
+    }).then(result => {
         res.json(result);
-    })
-    .catch(err => {
+    }).catch(err => {
         console.error(err);
     })
 });
@@ -135,11 +142,10 @@ router.post("/Sell", async (req, res) => {
 router.post("/Sell_false", async (req, res) => {
   const bid = req.body.bid;
   await book
-    .update({ issell: false }, { where: { bid: bid } })
-    .then((result) => {
+    .update({ issell: false }, { where: { bid: bid }
+    }).then((result) => {
       res.json(result);
-    })
-    .catch((err) => {
+    }).catch((err) => {
       console.error(err);
     })
 });
