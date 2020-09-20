@@ -6,7 +6,6 @@ const bodyParser = require("body-parser");
 const book = require('../models').book;
 const Sequelize = require('sequelize');
 const fs = require('fs');
-const { col } = require('sequelize');
 const Op = Sequelize.Op;
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));

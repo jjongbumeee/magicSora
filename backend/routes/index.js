@@ -6,5 +6,8 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-
+router.post('/time', (req, res) => {
+  const time = new Date().getMinutes();
+  res.send({time: time});
+})
 module.exports = router;
