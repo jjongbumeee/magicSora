@@ -60,7 +60,7 @@ router.post("/upload", upload.single('file'), async (req, res) => {
     }).then(book => {
         console.log("generated BOOK", book.name);
         // type 변환을 위해 "" 삽입
-        res.send({ bid: book.bid });
+        res.send({bid : book.bid});
     }).catch(err => {
         console.error(err);
     })

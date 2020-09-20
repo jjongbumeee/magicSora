@@ -1,4 +1,4 @@
-# 마법의 소라고동 프로젝트 <img src="https://img.shields.io/badge/status-developing-yellow" align = "center"/>
+# 마법의 소라고동 프로젝트 <img src="https://img.shields.io/badge/status-developing-darkgreen" align = "center"/>
 
 ### Team Member
 | 이름 | Github 링크 | 역할 |

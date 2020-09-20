@@ -36,6 +36,7 @@ import VueSimpleAlert from 'vue-simple-alert';
 import host from '../assets/iptable.json';
 Vue.use(VueSimpleAlert);
 export default {
+  props: ['logged'],
   data: function() {
     return {
       bookItem: {
@@ -58,19 +59,36 @@ export default {
         this.bookItem.file = file;
       }
     },
-    sendfile : async function() {
+    sendfile : function() {
+      let vm = this;
       const formData = new FormData();
       formData.append('file', this.bookItem.file);
       formData.append('name', this.bookItem.name);
       formData.append('auth', this.bookItem.auth);
       formData.append('pub', this.bookItem.pub);
       formData.append('price', this.bookItem.price);
-      try{
-        await axios.post(host.host+'/book/upload', formData);
-      } catch(err) {
+
+      axios.post(host.host + '/book/upload', formData)
+      .then(function(response) {
+        if(vm.logged) {
+          axios.post(host.host + '/book/Accept', {
+            bid: response.data.bid
+          })
+          .then(function(res) {
+            vm.$emit('close');
+          })
+          .catch(function(err) {
+            console.log(err);
+          })
+        }
+        else {
+          alert('관리자의 승인 이후 책이 등록됩니다.');
+          vm.$emit('close');
+        }
+      })
+      .catch(function(err) {
         console.log(err);
-      }
-      this.$emit('close');
+      }) 
     },
   }
 }
