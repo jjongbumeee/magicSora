@@ -5,6 +5,7 @@
         <book-header/>
       </span>
     </router-link>
+    <!-- book search component -->
     <book-search @search="searchDB"/>
 
     <!-- add book modal -->
@@ -37,7 +38,8 @@
     <button id="show-modal" style="border : none" :class="{bookReg : regStatus}" v-if="logged">
       <book-footer :propsdata="token" ref="footer"/>
     </button>
-
+    
+    <!-- admin login modal -->
     <admin-modal v-if="showAdminModal" @close="showAdminModal = false" @token="getToken">
       <h3 slot="header">Admin Login</h3>
     </admin-modal>
@@ -48,7 +50,6 @@
 import BookHeader from './components/BookHeader.vue'
 import BookSearch from './components/BookSearch.vue'
 import BookList from './components/BookList.vue'
-// import BookAddItem from './components/BookAddItem.vue'
 import BookFooter from './components/BookFooter.vue'
 import AdminModalView from './components/AdminModalView.vue'
 import BookModalView from './components/BookModalView.vue'
@@ -60,7 +61,6 @@ import VueRouter from 'vue-router'
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
 import host from './assets/iptable.json'
-var vueInstance;
 export const router = new VueRouter({
   routes: [
     
@@ -109,7 +109,25 @@ export default {
   created() {
     this.bookList = [];
     this.refreshItem();
-    vueInstance = this;
+    let token = window.localStorage.getItem('token');
+    let vm = this;
+    if(token) {
+      axios.get(this.host.host + '/admin/adminCheck', { 
+        params : {
+          token : token
+        }
+      })
+      .then(function(response) {
+        vm.logged = true;
+        vm.token = token;
+        setTimeout(() => {
+          vm.$refs.footer.checkAccount();
+        }, 100);
+      })
+      .catch(function(err) {
+        console.log(err);
+      })
+    }
   },
   methods: {
     searchDB: function(name) { // express에서 책 제목을 이용한 Select Query 구현 - 넘어온 객체 파싱해서 보여주기 필요
