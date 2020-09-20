@@ -57,7 +57,7 @@ router.post("/upload", upload.single('file'), async (req, res) => {
         image: image
     }).then(book => {
         console.log("generated BOOK", book.name);
-        res.send({});
+        res.send(book.bid);
     }).catch(err => {
         console.error(err);
     })
