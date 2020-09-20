@@ -1,7 +1,7 @@
 <template>
   <ul class="shadow">
     <div v-for="(bookData) in propsdata" :key="bookData.bid">
-      <div v-if="loggedIn || bookData.isaccept" id="cs">
+      <div v-if="bookData.isaccept" id="cs">
         <img id="bookimg" :src=bookData.filename :class="{selledBook : bookData.issell}">
         <li :class="{selledBook : bookData.issell}">
             <p>책 이름: {{ bookData.name }} </p>
@@ -29,6 +29,7 @@
 </template>
 <script>
 import host from '../assets/iptable.json'
+import axios from 'axios'
 
 export default {
   props: ['propsdata', 'loggedIn'],
@@ -60,6 +61,12 @@ export default {
         vueInstance.axios.post(vueInstance.host.host + '/book/bookDelete', {
           bid : bid
         })
+        .then(function(res) {
+          vueInstance.$emit('refresh');
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
       })
       .catch(function(err) {
         alert("정상적인 접근 경로가 아닙니다.\n페이지를 새로고침 후 다시 시도 해주세요.");
@@ -70,27 +77,64 @@ export default {
       })
     },
     sold : function(bid) {
-      let vueInstance = this;
-      this.axios.post(this.host.host + '/book/Sell', {
-        bid : bid
+      if(!this.loggedIn) {
+        console.log("Access Denied! You need admin access");
+        return;
+      }
+      let vm = this;
+
+      axios.get(vm.host.host + '/admin/adminCheck', {
+        params: {
+          token: window.localStorage.getItem('token')
+        }
       })
       .then(function(response) {
-        vueInstance.$emit('refresh');
+        axios.post(vm.host.host + '/book/Sell', {
+          bid : bid
+        })
+        .then(function(response) {
+          vm.$emit('refresh');
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
       })
       .catch(function(err) {
+        alert("정상적인 접근 경로가 아닙니다.\n페이지를 새로고침 후 다시 시도 해주세요.");
         console.log(err);
+      })
+      .then(function() {
+        vm.$emit('refresh');
       }) 
     },
     unsold : function(bid) {
-      let vueInstance = this;
-      this.axios.post(this.host.host + '/book/Sell_false', {
-        bid : bid
+      if(!this.loggedIn) {
+        console.log("Access Denied! You need admin access");
+        return;
+      }
+      let vm = this;
+      axios.get(host.host + '/admin/adminCheck', {
+        params: {
+          token: window.localStorage.getItem('token')
+        }
       })
-      .then(function(res) {
-        vueInstance.$emit('refresh');
+      .then(function(response) {
+        axios.post(vm.host.host + '/book/Sell_false', {
+          bid : bid
+        })
+        .then(function(response) {
+          vm.$emit('refresh');
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
       })
       .catch(function(err) {
+        alert("정상적인 접근 경로가 아닙니다.\n페이지를 새로고침 후 다시 시도 해주세요.");
         console.log(err);
+      })
+      .then(function() {
+        vm.$emit('refresh');
       })
     }
   }

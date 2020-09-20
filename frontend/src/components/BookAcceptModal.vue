@@ -1,8 +1,8 @@
 <template>
   <transition name="modal">
     <div class="modal-mask">
-      <div class="modal-wrapper" v-on:click="$emit('close')">
-        <div class="modal-container" v-on:click.stop="">
+      <div class="modal-wrapper" @click="$emit('close')">
+        <div class="modal-container" @click.stop="">
 
           <div class="modal-header">
             <slot name="header">
@@ -12,7 +12,7 @@
 
           <div class="modal-body">
             <slot name="body">
-                <div v-for="(bookData) in propsdata" :key="bookData.bid">
+                <div v-for="bookData in propsdata" :key="bookData.bid">
                     <div v-if="!bookData.isaccept">
                         <img id="bookimg" :src=bookData.filename>
                         <li>
@@ -22,6 +22,7 @@
                             <p>가격: {{ bookData.price | currency }}</p>
                         </li>
                         <button @click="acceptBook(bookData.bid)">판매 승인</button>
+                        <button @click="deleteBook(bookData.bid)">판매 거절</button>
                         <br>
                     </div>
                 </div>
@@ -37,35 +38,78 @@
 </template>
 
 <script>
-import host from '../assets/iptable.json'
+import host from '../assets/iptable.json';
+import axios from 'axios';
 export default {
-    props: ['propsdata'],
-    data: function() {
-        return {
-            host : host
+  props: ['propsdata', 'logged'],
+  filters: {
+    currency: value => {
+      if (!value) return ''
+      return value.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,") 
+    } 
+  },
+  methods: {
+    acceptBook : function(bid) {
+      if(!this.logged) {
+        console.log("Access Denied! You need admin access");
+        return;
+      }
+      let vm = this;
+      axios.get(host.host + '/admin/adminCheck', {
+        params: {
+          token : window.localStorage.getItem('token')
         }
+      })
+      .then(function(response) {
+        axios.post(host.host + '/book/Accept', {
+          bid : bid
+        })
+        .then(function(res) {
+          // modal close & reopen
+          vm.$emit('close');
+          vm.$parent.refreshItem();
+          vm.$parent.getReadyModal();
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
+      })
+      .catch(function(err) {
+        alert("정상적인 접근 경로가 아닙니다.\n페이지를 새로고침 후 다시 시도 해주세요.");
+        console.log(err);
+      })
     },
-    filters: {
-        currency: value => {
-            if (!value) return ''
-            return value.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,") 
-        } 
-    },
-    methods: {
-        acceptBook : function(bid) {
-            let vueInstance = this;
-            console.log(this.host.host);
-            this.axios.post(this.host.host + '/book/Accept', {
-                bid : bid
-            })
-            .then(function(res) {
-                vueInstance.$emit('refresh');
-            })
-            .catch(function(err) {
-                console.log(err);
-            })
+    deleteBook : function(bid) {
+      let vm = this;
+      if(!this.logged) {
+        console.log("Access Denied! You need admin access");
+        return;
+      }
+      axios.get(host.host + '/admin/adminCheck', {
+        params: {
+          token : window.localStorage.getItem('token')
         }
+      })
+      .then(function(response) {
+        axios.post(host.host + '/book/bookDelete', {
+          bid : bid
+        })
+        .then(function(res) {
+          // modal close & reopen
+          vm.$emit('close');
+          vm.$parent.refreshItem();
+          vm.$parent.getReadyModal();
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
+      })
+      .catch(function(err) {
+        alert("정상적인 접근 경로가 아닙니다.\n페이지를 새로고침 후 다시 시도 해주세요.");
+        console.log(err);
+      })
     }
+  }
 }
 </script>
 

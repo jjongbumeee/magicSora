@@ -7,29 +7,37 @@
     </router-link>
     <book-search @search="searchDB"/>
 
+    <!-- add book modal -->
     <span id="show-modal" @click="showBookModal = true" style="border : none" class="addBtn">
       책 등록하기
     </span>
-    <book-modal v-if="showBookModal" @close="showBookModal = false; refreshItem()" >
+    <book-modal v-if="showBookModal" @close="showBookModal = false, refreshItem()" :logged="logged">
       <h3 slot="header">판매하실 책을 등록해주세요</h3>
     </book-modal>
 
+    <!-- non-ready book accept modal -->
     <span id="show-modal" @click="showReadyModal = true" style="border : none" class="addBtn" v-if="logged">
       판매 승인
     </span>
-    <book-accept v-if="showReadyModal" @close="showReadyModal = false; refreshItem()" :propsdata="bookList">
+    <book-accept v-if="showReadyModal" @close="showReadyModal = false; refreshItem()" :propsdata="bookList" :logged="logged">
       <h3 slot="header">판매 승인대기 중인 책</h3>
     </book-accept>
 
-
-    <router-view/>
+    <!-- bookList component -->
     <book-list :propsdata="bookList"
-    @refresh="refreshItem" :loggedIn="logged" :class="{bookReg : regStatus}"/>
+    @refresh="refreshItem" :loggedIn="logged"/>
     
+    <!-- unlogged footer -->
     <button id="show-modal" @click="showAdminModal = true" style="border : none" 
-    :class="{bookReg : regStatus}">
+    :class="{bookReg : regStatus}" v-if="!logged">
       <book-footer :propsdata="token" ref="footer"/>
     </button>
+    
+    <!-- logged in footer -->
+    <button id="show-modal" style="border : none" :class="{bookReg : regStatus}" v-if="logged">
+      <book-footer :propsdata="token" ref="footer"/>
+    </button>
+
     <admin-modal v-if="showAdminModal" @close="showAdminModal = false" @token="getToken">
       <h3 slot="header">Admin Login</h3>
     </admin-modal>
@@ -55,25 +63,13 @@ import host from './assets/iptable.json'
 var vueInstance;
 export const router = new VueRouter({
   routes: [
-    // { //TODO: 최종 확인 후 불필요한 경우 라우터 제거
-    //   path: '/addBook',
-    //   name: 'AddBookItem',
-    //   component: BookAddItem,
-    // },
+    
     {
       path: '/',
       name: 'MainComponent'
     }
   ]
 });
-
-// router.beforeEach(async function(to, from, next) {
-//   if(to.path == "/" && from.path == "/addBook") {
-//     vueInstance.addToggle();
-//     vueInstance.refreshItem();
-//   } 
-//   next();
-// });
 
 export default {
   components:{
@@ -140,7 +136,7 @@ export default {
     refreshItem: function() {
       this.axios.get(this.host.host+'/book/booktbl')
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         this.bookList = res.data//JSON.parse(JSON.stringify(response.data))
         for(var i = 0; i < this.bookList.length; i++) {
           this.bookList[i].filename = this.host.host + '/book/' + this.bookList[i].image;
@@ -153,6 +149,9 @@ export default {
       setTimeout(() => { // 바로 checkAccount 실행 시 에러 발생함, 시간 간격을 둠
         this.$refs.footer.checkAccount();
       }, 100);
+    },
+    getReadyModal : function() {
+      this.showReadyModal = true;
     }
   },
   router: router,
