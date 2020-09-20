@@ -109,8 +109,29 @@ export default {
   created() {
     this.bookList = [];
     this.refreshItem();
-    let token = window.localStorage.getItem('token');
+    
+    let time = Date.parse(window.localStorage.getItem('time'));
     let vm = this;
+    if(time) {
+      axios.post(host.host + '/time', {})
+      .then(function(res) {
+        let currentTime = Date.parse(res.data.time);
+        let diff = Math.abs(currentTime - time);
+        console.log(diff);
+        if(diff >= 600000) {
+          window.localStorage.removeItem('time');
+          window.localStorage.removeItem('token');
+          setTimeout(() => {
+            location.reload();
+          }, 100);
+          // location.reload();
+        }
+      })
+      .catch(function(err) {
+        console.log(err);
+      })
+    }
+    let token = window.localStorage.getItem('token');
     if(token) {
       axios.get(this.host.host + '/admin/adminCheck', { 
         params : {

@@ -51,11 +51,19 @@ export default {
         window.localStorage.setItem('token', res.data.token);
         vue.$alert("관리자 로그인되었습니다.");
         vue.$emit('token', {token : res.data.token});
+        axios.post(host.host + '/time', {})
+        .then(function(res) {
+          window.localStorage.setItem('time', res.data.time);
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
       })
       .catch(function(err) {
         console.log(err);
         vue.$alert("관리자 계정 정보를 다시 확인해주세요.");
       })
+      
       this.$emit('close');
     }
   }

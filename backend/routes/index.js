@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/time', (req, res) => {
-  const time = new Date().getMinutes();
+  const time = new Date();
   res.send({time: time});
 })
 module.exports = router;
