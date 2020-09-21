@@ -1,5 +1,10 @@
 # 마법의 소라고동 프로젝트 <img src="https://img.shields.io/badge/status-developed-darkgreen" align = "center"/>
 ## [구현 웹사이트](http://203.254.143.175:8081/)
+## 관련 뉴스, 칼럼
+- [서울시, 서울형 책방 서비스 오픈](http://mediahub.seoul.go.kr/archives/1295844) / 서울시보 2020.09.16
+- [동네 책방이 살아야하는 이유](http://mobile.busan.com/view/busan/view.php?code=2020091618375532690) / 부산일보 2020.09.16
+- [문화생태계의 기반, 동네 책방](http://www.hani.co.kr/arti/opinion/column/959947.html) / 한겨레 2020.08.30
+
 ### Team Member
 | 이름 | Github 링크 | 역할 |
 | --- | :--- | :--- |

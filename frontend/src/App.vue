@@ -107,9 +107,6 @@ export default {
     }
   },
   created() {
-    this.bookList = [];
-    this.refreshItem();
-    
     let time = Date.parse(window.localStorage.getItem('time'));
     let vm = this;
     if(time) {
@@ -149,6 +146,8 @@ export default {
         console.log(err);
       })
     }
+    this.bookList = [];
+    this.refreshItem();
   },
   methods: {
     searchDB: function(name) { // express에서 책 제목을 이용한 Select Query 구현 - 넘어온 객체 파싱해서 보여주기 필요
