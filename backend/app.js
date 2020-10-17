@@ -2,21 +2,29 @@ const createError = require('http-errors');
 const path = require('path');
 const logger = require('morgan');
 const cors = require('cors');
+const cors_origin = [`http://localhost:8080`];
 const express = require('express');
 const auth = require('./routes/auth')();
 const app = express();
 
-app.use(cors());
 const indexRouter = require('./routes/index');
 const bookRouter = require('./routes/book');
 const adminRouter = require('./routes/admin');
 
+// cors dev setting
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 // cors setting
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(
+    cors({
+        origin: cors_origin,
+        credentials: true,
+    })
+);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views')); //__dirname current directory name
