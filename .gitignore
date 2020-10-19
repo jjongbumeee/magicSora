@@ -1,5 +1,4 @@
 backend/config/
-backend/models/
 backend/seeders
 backend/migrations
 frontend/src/assets/iptable.json
